@@ -1,0 +1,22 @@
+https://docs.google.com/document/d/1HjAUI1aPaK33ipXj3vJ7XO69BcV_V6i8ZKKybb6gCrQ/edit
+
+
+link to shevi missions⬆️
+
+
+
+ דוגמה להוספה של דירוג למוסד
+ const documentId = "your-document-id";  Replace with the actual document ID
+ const newValue = "new-value-to-insert";
+
+ YourModel.updateOne(
+   { _id: documentId },  Query to find the document
+   { $push: { yourArrayField: newValue } },  Use $push to insert the value into the array field
+   (err, result) => {
+     if (err) {
+       console.error(err);
+     } else {
+       console.log("Value inserted successfully:", result);
+     }
+   }
+ );

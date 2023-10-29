@@ -1,0 +1,21 @@
+get http://localhost:3000
+
+### register
+post http://localhost:3000/users/register
+Content-Type: application/json
+
+{
+        "email":"chani45@gmail.com",
+        "password":"123456",
+        "name":"Elisheva"
+}
+
+### login
+post http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+        "email":"chani45@gmail.com",
+        "password":"123456"
+}
+
