@@ -8,6 +8,6 @@ router.get('/', (req, res) => {
 })
 router.post('/addReview', reviewCtrl.addReview)
 router.post('/deleteReview', reviewCtrl.deleteReview)
-router.post('/updateReview', reviewCtrl.updateReview)
+
 
 export default router;

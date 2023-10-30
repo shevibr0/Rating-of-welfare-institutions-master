@@ -3,7 +3,6 @@ import { secret } from '../config/secret.js';
 
 export const auth = (req, res, next) => {
     const accessToken = req.cookies.access_token;
-    console.log({accessToken:accessToken})
     if (!accessToken) {
         return next({status:401,message:'User not authenticated'})
     }

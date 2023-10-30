@@ -18,10 +18,8 @@ const reviewCtrl = {
   // )
   async deleteReview() {
 
-  },
-  async updateReview() {
-
   }
+ 
 }
 
 export default reviewCtrl

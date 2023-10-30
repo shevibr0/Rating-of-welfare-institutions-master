@@ -1,8 +1,26 @@
-###
+### add rating
 post http://localhost:3000/institutes/addRating?institutId=653a4f6c4e6b26c828a4fccf
 Content-Type: application/json
-Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNhMzRkNDA2MDkwZDdlNmEzOTEyNWEiLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODMyMDQ5NywiZXhwIjoxNjk4MzI0MDk3fQ.zExKZ3itn3JHQ-O9gKKnMbBl5kgiuUZy51Uu54gOROo; Path=/; HttpOnly; Secure; SameSite=None
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODY2MTgzOSwiZXhwIjoxNjk4NjY1NDM5fQ.JzDas9K2k64EEhjLsvJnbVkQLD8dak8eQfJdoEUPOVU; Path=/; HttpOnly; Secure; SameSite=None   
 
 {
     "count":5
+}
+
+### updateRating
+post http://localhost:3000/institutes/updateRating?institutId=653a4f6c4e6b26c828a4fccf
+Content-Type: application/json
+Cookie:  access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODY2MTgzOSwiZXhwIjoxNjk4NjY1NDM5fQ.JzDas9K2k64EEhjLsvJnbVkQLD8dak8eQfJdoEUPOVU; Path=/; HttpOnly; Secure; SameSite=None
+
+{
+    "count":10
+}
+
+### delet rating
+post http://localhost:3000/institutes/deleteRating?institutId=653a4f6c4e6b26c828a4fccf
+Content-Type: application/json
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODY2MTgzOSwiZXhwIjoxNjk4NjY1NDM5fQ.JzDas9K2k64EEhjLsvJnbVkQLD8dak8eQfJdoEUPOVU; Path=/; HttpOnly; Secure; SameSite=None
+
+{
+    
 }
