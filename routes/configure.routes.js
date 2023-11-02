@@ -27,6 +27,7 @@ router.use((err,req,res,next)=>{
         status: status ? status : "500"
     }
     if (stack) error.stack = stack;
+
     if (process.env.MODE == "production") {
         error.message = "there is error";
         delete error.stack;

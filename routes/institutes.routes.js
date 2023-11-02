@@ -5,14 +5,12 @@ import { auth } from '../middleware/middleware.js';
 
 const router = express.Router();
 
-router.get('/', async(req, res) => {
-    const data= await Institutes.find({})
-    res.json({data})
-})
 
+router.get("/getInstitutes",auth,instituteCtrl.getInstitutes)
 router.post("/addRating",auth, instituteCtrl.addRating)
 router.post("/updateRating",auth, instituteCtrl.updateRating)
 router.post("/deleteRating",auth, instituteCtrl.deleteRating)
+router.get("/search",auth, instituteCtrl.search)
 
 
 export default router;

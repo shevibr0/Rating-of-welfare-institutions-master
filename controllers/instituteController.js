@@ -1,6 +1,25 @@
 import Institutes from "../models/Institute.js"
 
 const instituteCtrl = {
+    async getInstitutes({ query, body, payload },res,next){
+        const { limit, offset } = query
+      try {
+          let institutes = []
+          if (limit) {
+            institutes = await Institutes.find({}).limit(limit).skip(offset || 0)
+          }
+          else {
+            institutes = await Institutes.find({})
+              return res.status(200).json(reviews)
+          }
+          return res.status(200).json({
+              institutes,
+              next: process.env.SERVER_URL +`Institutes/getInstitutes/?limit=${limit}&offset=${parseInt(limit) + (parseInt(offset) || 0)}`
+          })
+      } catch (error) {
+          next({ stack: error, message: "faild to get" })
+      }
+      },
     async addRating({ query, body, payload }, res, next) {
 
         try {
@@ -71,8 +90,47 @@ const instituteCtrl = {
         } catch (error) {
             next({ stack: error });
         }
-    }
+    },
+    async search({ query, body, payload },res,next){
+        try {
+            const { limit, offset } = query
+            let institutes = [];
+        const searchValue=new RegExp( query.search, 'i')
 
+        if (limit) {
+            institutes =await Institutes.find({
+                $or: [
+                  { Name: searchValue },
+                  { Type_Descr: searchValue },
+                  { Head_Department: searchValue },
+                  { Region_Descr: searchValue },
+                  { City_Name: searchValue }
+                ]
+              }).limit(limit).skip(offset || 0)
+        }
+        else{
+            institutes =await Institutes.find({
+                $or: [
+                  { Name: searchValue },
+                  { Type_Descr: searchValue },
+                  { Head_Department: searchValue },
+                  { Region_Descr: searchValue },
+                  { City_Name: searchValue }
+                ]
+              })
+
+              return res.status(200).json(institutes)
+        }
+        return res.status(200).json({
+            institutes,
+            next: process.env.SERVER_URL +`Institutes/search/?limit=${limit}&offset=${parseInt(limit) + (parseInt(offset) || 0)}&search=${query.search}`
+        })
+       
+        } catch (error) {
+         next({stack:error})
+        }
+    }
 }
+
 
 export default instituteCtrl
