@@ -2,18 +2,16 @@ import { Reviews } from '../models/reviewsModel.js'
 
 
 const reviewCtrl = {
-  async getInstitutes(){
-
-  },
+ 
   async getReviews({ query, body, payload },res,next){
-    const { limit, offset } = query
+    const { limit, offset, institutId} = query
   try {
       let reviews = []
       if (limit) {
-          reviews = await Reviews.find({}).sort({ createdAt: -1 }).limit(limit).skip(offset || 0)
+          reviews = await Reviews.find({InstitutesId:institutId}).populate({path:"userId",select:"name"}).sort({ createdAt: -1 }).limit(limit).skip(offset || 0)
       }
       else {
-          reviews = await Reviews.find({}).sort({ createdAt: -1 })
+          reviews = await Reviews.find({InstitutesId:institutId}).populate({path:"userId",select:"name"}).sort({ createdAt: -1 })
           return res.status(200).json(reviews)
       }
       return res.status(200).json({
