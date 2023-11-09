@@ -32,3 +32,11 @@ Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMj
 ### search Institutes
 get http://localhost:3000/institutes/search/?limit=4&search=ירושלים
 Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODkxODA2NCwiZXhwIjoxNzAxNTEwMDY0fQ.3Sb1Ynz1P-1Lu2A2zww469Y0tMrM9nur1Y6vIi2Wk_k; Path=/; HttpOnly; Secure; SameSite=None
+
+### get categories
+get http://localhost:3000/institutes/categories
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODkxODA2NCwiZXhwIjoxNzAxNTEwMDY0fQ.3Sb1Ynz1P-1Lu2A2zww469Y0tMrM9nur1Y6vIi2Wk_k; Path=/; HttpOnly; Secure; SameSite=None
+
+### get By categories
+get http://localhost:3000/institutes/getByCategories?category=קורת גג&limit=4
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODkxODA2NCwiZXhwIjoxNzAxNTEwMDY0fQ.3Sb1Ynz1P-1Lu2A2zww469Y0tMrM9nur1Y6vIi2Wk_k; Path=/; HttpOnly; Secure; SameSite=None

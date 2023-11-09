@@ -7,20 +7,21 @@ config();
 
 
 import express from "express"
-const router=express.Router();
+const router = express.Router();
 
 router.get("/", (req, res) => {
     res.json({ msg: "server is work" });
-    });
+});
 
 router.use("/users", usersR);
 router.use("/reviews", reviewsR);
 router.use("/institutes", institutesR);
 
+
 // error handler
 
-router.use((err,req,res,next)=>{
-    console.log({errorHandler:err})
+router.use((err, req, res, next) => {
+    console.log({ errorHandler: err })
     const { status, message, stack } = err;
     const error = {
         message: message ? message : "internal error",

@@ -1,25 +1,26 @@
 import Institutes from "../models/Institute.js"
+import { Category } from "../models/categoryModel.js"
 
 const instituteCtrl = {
-    async getInstitutes({ query, body, payload },res,next){
+    async getInstitutes({ query, body, payload }, res, next) {
         const { limit, offset } = query
-      try {
-          let institutes = []
-          if (limit) {
-            institutes = await Institutes.find({}).limit(limit).skip(offset || 0)
-          }
-          else {
-            institutes = await Institutes.find({})
-              return res.status(200).json(reviews)
-          }
-          return res.status(200).json({
-              institutes,
-              next: process.env.SERVER_URL +`Institutes/getInstitutes/?limit=${limit}&offset=${parseInt(limit) + (parseInt(offset) || 0)}`
-          })
-      } catch (error) {
-          next({ stack: error, message: "faild to get" })
-      }
-      },
+        try {
+            let institutes = []
+            if (limit) {
+                institutes = await Institutes.find({}).limit(limit).skip(offset || 0)
+            }
+            else {
+                institutes = await Institutes.find({})
+                return res.status(200).json(reviews)
+            }
+            return res.status(200).json({
+                institutes,
+                next: process.env.SERVER_URL + `Institutes/getInstitutes/?limit=${limit}&offset=${parseInt(limit) + (parseInt(offset) || 0)}`
+            })
+        } catch (error) {
+            next({ stack: error, message: "faild to get" })
+        }
+    },
     async addRating({ query, body, payload }, res, next) {
 
         try {
@@ -66,10 +67,10 @@ const instituteCtrl = {
                 'Rating.userId': payload._id
             }).select("Rating avgRating")
             console.log(existingRating)
-            let countRating=0;
+            let countRating = 0;
             for (const rating of existingRating.Rating) {
                 if (rating.userId == payload._id) {
-                    countRating=rating.count
+                    countRating = rating.count
                     break;
                 }
             }
@@ -81,7 +82,7 @@ const instituteCtrl = {
                     },
                     $inc: {
                         'avgRating.count': -1, // Decrease the count by 1
-                        'avgRating.sum':-countRating , // Decrease the sum by the user's count
+                        'avgRating.sum': -countRating, // Decrease the sum by the user's count
                     },
                 }
             );
@@ -91,43 +92,72 @@ const instituteCtrl = {
             next({ stack: error });
         }
     },
-    async search({ query, body, payload },res,next){
+    async search({ query, body, payload }, res, next) {
         try {
             const { limit, offset } = query
             let institutes = [];
-        const searchValue=new RegExp( query.search, 'i')
+            const searchValue = new RegExp(query.search, 'i')
 
-        if (limit) {
-            institutes =await Institutes.find({
-                $or: [
-                  { Name: searchValue },
-                  { Type_Descr: searchValue },
-                  { Head_Department: searchValue },
-                  { Region_Descr: searchValue },
-                  { City_Name: searchValue }
-                ]
-              }).limit(limit).skip(offset || 0)
-        }
-        else{
-            institutes =await Institutes.find({
-                $or: [
-                  { Name: searchValue },
-                  { Type_Descr: searchValue },
-                  { Head_Department: searchValue },
-                  { Region_Descr: searchValue },
-                  { City_Name: searchValue }
-                ]
-              })
+            if (limit) {
+                institutes = await Institutes.find({
+                    $or: [
+                        { Name: searchValue },
+                        { Type_Descr: searchValue },
+                        { Head_Department: searchValue },
+                        { Region_Descr: searchValue },
+                        { City_Name: searchValue }
+                    ]
+                }).limit(limit).skip(offset || 0)
+            }
+            else {
+                institutes = await Institutes.find({
+                    $or: [
+                        { Name: searchValue },
+                        { Type_Descr: searchValue },
+                        { Head_Department: searchValue },
+                        { Region_Descr: searchValue },
+                        { City_Name: searchValue }
+                    ]
+                })
 
-              return res.status(200).json(institutes)
-        }
-        return res.status(200).json({
-            institutes,
-            next: process.env.SERVER_URL +`Institutes/search/?limit=${limit}&offset=${parseInt(limit) + (parseInt(offset) || 0)}&search=${query.search}`
-        })
-       
+                return res.status(200).json(institutes)
+            }
+            return res.status(200).json({
+                institutes,
+                next: process.env.SERVER_URL + `Institutes/search/?limit=${limit}&offset=${parseInt(limit) + (parseInt(offset) || 0)}&search=${query.search}`
+            })
+
         } catch (error) {
-         next({stack:error})
+            next({ stack: error })
+        }
+    },
+    async getCategories(req, res, next) {
+        try {
+            const resp = await Category.find({})
+            res.status(200).json(resp)
+        } catch (error) {
+            next({ stack: error })
+        }
+    },
+    async getByCategories({ query }, res, next) {
+        const { limit, offset, category } = query
+        let institutes = [];
+        try {
+            if (limit) {
+                institutes = await Institutes.find({ Type_Descr: category }).limit(limit).skip(offset || 0)
+            }
+
+            else {
+                institutes = await Institutes.find({ Type_Descr: category })
+                return res.status(200).json(institutes)
+            }
+            res.status(200).json({
+                next: process.env.SERVER_URL + `Institutes/getByCategory/?limit=${limit}&offset=${parseInt(limit) + (parseInt(offset) || 0)}&category=${query.category}`,
+                institutes
+            })
+
+        } catch (error) {
+            next({ stack: error })
         }
     }
 }
