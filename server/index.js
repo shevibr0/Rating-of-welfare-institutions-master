@@ -9,7 +9,7 @@ const app = express();
 app.use(cookieParser());
 //? give you the ability to use cors
 app.use(cors({
-    origin: "*",
+    origin: "http://localhost:5173",
     credentials: true
 }))
 
