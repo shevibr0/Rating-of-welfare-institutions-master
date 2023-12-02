@@ -18,5 +18,7 @@ Content-Type: application/json
         "email":"pini554@gmail.com",
         "password":"123456"
 }
-
+### checAuth
+get http://localhost:3000/users/checkAuth
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODkxODA2NCwiZXhwIjoxNzAxNTEwMDY0fQ.3Sb1Ynz1P-1Lu2A2zww469Y0tMrM9nur1Y6vIi2Wk_k; Path=/; HttpOnly; Secure; SameSite=None
 

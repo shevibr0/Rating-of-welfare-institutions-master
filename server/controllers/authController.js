@@ -11,18 +11,18 @@ import { hash, compare } from "bcrypt";
 //    }
 // }
 const authCtrl = {
-    register: async(req, res,next) => {
+    register: async (req, res, next) => {
         const bodyData = req.body;
 
         try {
             //? validate the data before create new user
-            
-            const{error}=userValidation.signUp(bodyData);
+
+            const { error } = userValidation.signUp(bodyData);
             //? if there is an error
             if (error) {
                 //? return the error message
                 // return res.status(400).json({ erorr: validation.error.details[0].message })
-                return next({status:422,stack:error,message:"missinig fields"})
+                return next({ status: 422, stack: error, message: "missinig fields" })
             }
             const user = new User(bodyData);
             //? hash the password
@@ -36,55 +36,61 @@ const authCtrl = {
         } catch (error) {
             //? if the email is already exist
             if (error.code === 11000) {
-                return next({status:409,stack:error,message:"email is already exist"})
-               
+                return next({ status: 409, stack: error, message: "email is already exist" })
+
             }
             next(true)
         }
 
     },
-    login: async(req, res,next) => {
-        
+    login: async (req, res, next) => {
+
         // const { email, password } = req.body;
         // const validation = userValidation.login({ email,password });
         try {
             const body = req.body;
             const validation = userValidation.login(body);
-            
+
             if (validation.error) {
-                return next({status:422,stack:validation.error,message:"missinig fields"})
+                return next({ status: 422, stack: validation.error, message: "missinig fields" })
             }
-            
+
             const user = await User.findOne({ email: body.email });
-           
+
             //? if the user is not exist
             if (!user) {
-                return next({status:403,message:"email or password is incorrect"})
+                return next({ status: 403, message: "email or password is incorrect" })
 
             }
-            
+
             //? compare the password
             const isMatch = await compare(body.password, user.password)
-            
+
             if (!isMatch) {
-                return next({status:403,message:"email or password is incorrect"})
+                return next({ status: 403, message: "email or password is incorrect" })
             }
             //? create token
             const token = createToken(user, '30d');
             //? save the token in the cookie
-            res.cookie('access_token', token,{ httpOnly: true, sameSite: "None", secure: true })
+            res.cookie('access_token', token, { httpOnly: true, sameSite: "None", secure: true })
             return res.status(200).json({ msg: "login success" })
         } catch (error) {
-            return next({stack:error})
+            return next({ stack: error })
         }
     },
-    logout: async(req, res) => {
+    logout: async (req, res) => {
         res.clearCookie('access_token');
         res.json({ msg: "logout success" })
     },
-    checkAuth: async(req, res) => {
-        const { _id, role } = req.payload;
-        res.json({ msg: "user is authenticated", _id, role })
+    checkAuth: async (req, res) => {
+        try {
+            const { _id, role } = req.payload;
+            const user = await User.findOne({ _id }, { password: 0 })
+            res.status(200).json({ msg: "user is authenticated", user })
+        } catch (error) {
+            return next({ stack: error })
+        }
+
     }
 
 
