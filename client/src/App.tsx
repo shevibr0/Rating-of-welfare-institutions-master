@@ -11,7 +11,9 @@ function App() {
   useEffect(() => {
     checkUser()
   }, [])
-
+  useEffect(() => {
+    console.log(user)
+  }, [user])
   const checkUser = async () => {
     try {
       const { data } = await axios.get<{ msg: string, user: User }>("http://localhost:3000/users/checkAuth")
