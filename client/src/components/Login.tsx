@@ -1,7 +1,6 @@
-import React, { useContext } from 'react'
-import axios from 'axios'
-import { useObjectState } from 'mg-js'
-import { useForm, SubmitHandler } from "react-hook-form"
+import React, { useContext } from 'react';
+import axios from 'axios';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import UserContext, { User } from '../context/userContext';
 
@@ -10,41 +9,44 @@ type Inputs = {
   password: string;
 };
 
-const Login = () => {
-  const { setUser } = useContext(UserContext)
-  const nav = useNavigate()
+const Login: React.FC = () => {
+  const { setUser } = useContext(UserContext);
+  const nav = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>()
+  } = useForm<Inputs>();
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       const response = await axios.post('http://localhost:3000/users/login', data);
-      console.log("response", response);
-      updateUserContext()
-      nav("/")
+      console.log('response', response);
+      updateUserContext();
+      nav('/');
     } catch (err: any) {
-      // if (err.response.status == 409) {
-      //   return ({ message: "email is already exist" })
-      // }
-      console.error("login fail")
+      // Handle login failure
+      console.error('Login failed');
     }
-  }
+  };
+
   const updateUserContext = async () => {
     try {
-      const { data } = await axios.get<{ msg: string, user: User }>("http://localhost:3000/users/checkAuth")
-      setUser(data.user)
+      const { data } = await axios.get<{ msg: string; user: User }>('http://localhost:3000/users/checkAuth');
+      setUser(data.user);
     } catch (error) {
-      console.log("fail")
+      console.log('Failed to update user context');
     }
-  }
+  };
+
   return (
     <div className="flex items-center justify-center h-screen bg-purple-500 bg-opacity-30">
       <form
         className="bg-transparent p-8 rounded-lg shadow-md w-96 relative border-2 border-orange-400"
         onSubmit={handleSubmit(onSubmit)}
       >
+        <h2 className="text-xl font-semibold mb-4 text-purple-700 text-center">Login</h2>
+
         <label className="block mb-2 text-orange-400">Email:</label>
         <input
           type="email"
@@ -74,7 +76,7 @@ const Login = () => {
         {errors.password && <p className="text-red-500">{errors.password.message}</p>}
 
         <button type="submit" className="w-full p-2 bg-purple-700 text-white rounded-md">
-          Send
+          Login
         </button>
       </form>
     </div>

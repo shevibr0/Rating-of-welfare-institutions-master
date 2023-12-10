@@ -21,6 +21,21 @@ const instituteCtrl = {
             next({ stack: error, message: "faild to get" })
         }
     },
+    async getInstituteById({ query }, res, next) {
+        try {
+
+            const institute = await Institutes.findById(query.id);
+
+            if (!institute) {
+                console.log("in", institute)
+                return res.status(404).json({ message: "Institute not found" });
+            }
+
+            res.status(200).json(institute);
+        } catch (error) {
+            next({ stack: error });
+        }
+    },
     async addRating({ query, body, payload }, res, next) {
 
         try {
