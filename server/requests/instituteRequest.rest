@@ -2,7 +2,6 @@
 post http://localhost:3000/institutes/addRating?institutId=653a4f6c4e6b26c828a4fccf
 Content-Type: application/json
 Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwMjA0MjE0MCwiZXhwIjoxNzA0NjM0MTQwfQ.CZdTj5IUsFOPZ8o2wq6jieGVvGbyL-kGJHVgPFxpN-M; Path=/; HttpOnly; Secure; SameSite=None
-
 {
     "count":5
 }
@@ -27,15 +26,15 @@ Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMj
 
 ### get Institutes
 get http://localhost:3000/institutes/getInstitutes/?limit=4
-Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwMjAzNjE0OSwiZXhwIjoxNzA0NjI4MTQ5fQ.77ulsVH9v5iZz5bHOmuB0RIAT9fGp3ZIPV5Lvs9sMQc; Path=/; HttpOnly; Secure; SameSite=None
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwMzc1NDk2MiwiZXhwIjoxNzI5Njc0OTYyfQ.WLah5h4kDDAbm7xsBdMlO0VXU_j9JwCQhTMGuM71Mp8; Path=/; HttpOnly; Secure; SameSite=None
 
 ### get Institutes by id
 get http://localhost:3000/institutes/getInstitutesById?id=653a4f6c4e6b26c828a4fcd1
 Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwMjAzODA1MCwiZXhwIjoxNzA0NjMwMDUwfQ.QVpOq5mlpw6WOVGiADcIwPtmMMNTchqKCMuVXujTtpE; Path=/; HttpOnly; Secure; SameSite=None
   
 ### search Institutes
-get http://localhost:3000/institutes/search/?limit=4&search=מגדים
-Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODkxODA2NCwiZXhwIjoxNzAxNTEwMDY0fQ.3Sb1Ynz1P-1Lu2A2zww469Y0tMrM9nur1Y6vIi2Wk_k; Path=/; HttpOnly; Secure; SameSite=None
+get http://localhost:3000/institutes/search/?limit=4&search=מעון יום שיקומי ניצן איילת
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwMzc1NDk2MiwiZXhwIjoxNzI5Njc0OTYyfQ.WLah5h4kDDAbm7xsBdMlO0VXU_j9JwCQhTMGuM71Mp8; Path=/; HttpOnly; Secure; SameSite=None
 
 ### get categories
 get http://localhost:3000/institutes/categories

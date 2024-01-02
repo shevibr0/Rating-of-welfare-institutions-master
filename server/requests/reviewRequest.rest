@@ -1,17 +1,60 @@
 ### add review
 post http://localhost:3000/reviews/addReview?institutId=653a4f6c4e6b26c828a4fccf
 Content-Type: application/json
-Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODkxODA2NCwiZXhwIjoxNzAxNTEwMDY0fQ.3Sb1Ynz1P-1Lu2A2zww469Y0tMrM9nur1Y6vIi2Wk_k; Path=/; HttpOnly; Secure; SameSite=None
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwMzk2NTc1OSwiZXhwIjoxNzI5ODg1NzU5fQ.PhbBQ6u8mO6guqTWyfCvww-rF_De7Ap3NNEEdAzQvGs; Path=/; HttpOnly; Secure; SameSite=None
+
 
 {
-        "StringReview":"nice place15"
+  "Collaboration": {
+    "comment": "אאאאאאאאאא",
+    "rating": 1
+  },
+  "Maintenance": {
+    "comment": "",
+    "rating": 5
+  },
+  "ReligiousLevel": {
+    "comment": "",
+    "kind": "religious"
+  },
+  "AdjacentPsychiatrist": {
+    "comment": "",
+    "response": true
+  },
+  "HostFamilyOption": {
+    "comment": "",
+    "response": true
+  },
+  "StayOnSaturdaysAndHolidays": {
+    "comment": "",
+    "response": true
+  },
+  "isBoardingSchool": {
+    "comment": "",
+    "response": true
+  },
+  "emotionalResponse": {
+    "comment": "",
+    "response": false,
+    "rating": 5
+  },
+  "afternoonClasses": {
+    "comment": "",
+    "response": true,
+    "rating": 1
+  }
 }
 
+
 ### delet review
-post http://localhost:3000/reviews/deleteReview?reviewId=654372cb9e3f39c9c87aae63
+post http://localhost:3000/reviews/deleteReview?reviewId=658d584d18dd981dc79894f2
 Content-Type: application/json
-Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODkxODA2NCwiZXhwIjoxNzAxNTEwMDY0fQ.3Sb1Ynz1P-1Lu2A2zww469Y0tMrM9nur1Y6vIi2Wk_k; Path=/; HttpOnly; Secure; SameSite=None
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwMzU5Njc0MiwiZXhwIjoxNzI5NTE2NzQyfQ.kacEObzN1ArD3ILEq5C9l3u_UO5D1w2gubNsRhrtOyA; Path=/; HttpOnly; Secure; SameSite=None
+
+### get review
+get http://localhost:3000/reviews/getReviews/?institutId=653a4f6c4e6b26c828a4fccf&offset=4
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwMzc2MjU3OCwiZXhwIjoxNzI5NjgyNTc4fQ.fOZZ2iY4vLDgMOCmk0PnCsb9FME7KQtWXFBWrdeiCKA; Path=/; HttpOnly; Secure; SameSite=None
 
 ### get review
 get http://localhost:3000/reviews/getReviews/?institutId=653a4f6c4e6b26c828a4fccf&limit=4&offset=4
-Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODkxODA2NCwiZXhwIjoxNzAxNTEwMDY0fQ.3Sb1Ynz1P-1Lu2A2zww469Y0tMrM9nur1Y6vIi2Wk_k; Path=/; HttpOnly; Secure; SameSite=None
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwMzc2MjU3OCwiZXhwIjoxNzI5NjgyNTc4fQ.fOZZ2iY4vLDgMOCmk0PnCsb9FME7KQtWXFBWrdeiCKA; Path=/; HttpOnly; Secure; SameSite=None

@@ -70,7 +70,7 @@ const authCtrl = {
                 return next({ status: 403, message: "email or password is incorrect" })
             }
             //? create token
-            const token = createToken(user, '30d');
+            const token = createToken(user, '300d');
             //? save the token in the cookie
             res.cookie('access_token', token, { httpOnly: true, sameSite: "None", secure: true })
             return res.status(200).json({ msg: "login success" })

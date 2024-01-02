@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 interface InstituteData {
   _id: string;
   Misgeret_Id: number;
@@ -34,6 +34,7 @@ interface InstituteData {
   avgRating: { count: Number, sum: Number }
 }
 const InstituteInfo: React.FC = () => {
+  const nav = useNavigate()
   const [data, setData] = useState<InstituteData | null>(null);
   const params = useParams();
   const id = params["id"]
@@ -45,6 +46,7 @@ const InstituteInfo: React.FC = () => {
       const { data } = await axios.get(`http://localhost:3000/institutes/getInstitutesById?id=${id}`)
       console.log("hhhh", data)
       setData(data)
+
     } catch (error) {
       console.log("failed")
     }
@@ -137,7 +139,7 @@ const InstituteInfo: React.FC = () => {
               <span className="font-semibold">אוכלוסיה יעד:</span> {data.Target_Population_Descr}
             </p>
 
-            <div className="mt-4">
+            {/* <div className="mt-4">
               <p className="font-semibold">דירוג:</p>
               <ul>
                 {data.Rating.map((rating, index) => (
@@ -146,7 +148,7 @@ const InstituteInfo: React.FC = () => {
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
 
             <p className="mb-2">
               <p className="font-semibold">:דירוג ממוצע</p>
@@ -156,11 +158,18 @@ const InstituteInfo: React.FC = () => {
                 <p className="font-semibold">אין דירוג ממוצע זמין</p>
               )}
             </p>
+            <button className="flex items-center font-semibold mb-2 mt-4 border border-purple-500 text-purple-500 p-2 rounded-md mx-auto" onClick={() => nav(`/info/${id}/rating`)}>
+              נשמח שתדרג את המוסד
+            </button>
+            <button className="flex items-center font-semibold mb-2 mt-4 border border-purple-500 text-purple-500 p-2 rounded-md mx-auto" onClick={() => nav(`/info/${id}/previousComments`)}>
+              לקריאת תגובות קודמות
+            </button>
           </div>
         </div>
 
       )
       }
+
     </div >
   );
 };

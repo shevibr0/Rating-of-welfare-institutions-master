@@ -8,6 +8,8 @@ import LogOut from '../components/LogOut'
 import Login from '../components/Login'
 import UserContext from '../context/userContext'
 import Contact from '../components/Contact'
+import Rating from '../components/Rating'
+import PreviousComments from '../components/PreviousComments'
 
 const AppRouter = () => {
   const { user } = useContext(UserContext)
@@ -18,6 +20,8 @@ const AppRouter = () => {
       <Route path="/logout" element={<LogOut />} ></Route>
       <Route path="/" element={<HomePage />} ></Route>
       <Route path="/institutes" element={<Institutes />}> </Route>
+      <Route path="/info/:id/previousComments" element={<PreviousComments />}> </Route>
+      <Route path="/info/:id/rating" element={<Rating />}> </Route>
       <Route path="/info/:id" element={<InstituteInfo />} ></Route>
       <Route path="/contact" element={<Contact />} ></Route>
       <Route path="*" element={<h1>404</h1>}> </Route>

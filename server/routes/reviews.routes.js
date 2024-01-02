@@ -5,9 +5,9 @@ import { auth } from '../middleware/middleware.js';
 
 const router = express.Router();
 
-router.get('/getReviews',auth,reviewCtrl.getReviews)
-router.post('/addReview',auth, reviewCtrl.addReview)
-router.post('/deleteReview',auth, reviewCtrl.deleteReview)
+router.get('/getReviews', auth, reviewCtrl.getReviews)
+router.post('/addReview', auth, reviewCtrl.addReview)
+router.post('/deleteReview', auth, reviewCtrl.deleteReview)
 
 
 export default router;

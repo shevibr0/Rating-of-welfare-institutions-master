@@ -20,5 +20,4 @@ Content-Type: application/json
 }
 ### checAuth
 get http://localhost:3000/users/checkAuth
-Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODkxODA2NCwiZXhwIjoxNzAxNTEwMDY0fQ.3Sb1Ynz1P-1Lu2A2zww469Y0tMrM9nur1Y6vIi2Wk_k; Path=/; HttpOnly; Secure; SameSite=None
-
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwMzk2NTc1OSwiZXhwIjoxNzI5ODg1NzU5fQ.PhbBQ6u8mO6guqTWyfCvww-rF_De7Ap3NNEEdAzQvGs; Path=/; HttpOnly; Secure; SameSite=None
