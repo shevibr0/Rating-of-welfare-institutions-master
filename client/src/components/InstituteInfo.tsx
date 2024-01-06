@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router';
+import StarRating from './StarRating';
+
 interface InstituteData {
   _id: string;
   Misgeret_Id: number;
@@ -149,11 +151,13 @@ const InstituteInfo: React.FC = () => {
                 ))}
               </ul>
             </div> */}
-
             <p className="mb-2">
-              <p className="font-semibold">:דירוג ממוצע</p>
+              <span className="font-semibold">:דירוג ממוצע</span>
               {data.avgRating ? (
-                <p>{`סך הכל דירוגים: ${data.avgRating.count}, סכום הדירוגים: ${data.avgRating.sum}`}</p>
+                <>
+                  <p>{`כמות האנשים שדרגו: ${data.avgRating.count}, סכום הדירוגים: ${data.avgRating.sum}`}</p>
+                  <h1>הממוצע הסופי</h1><StarRating averageRating={data.avgRating.sum / data.avgRating.count} />
+                </>
               ) : (
                 <p className="font-semibold">אין דירוג ממוצע זמין</p>
               )}

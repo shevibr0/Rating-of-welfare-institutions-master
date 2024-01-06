@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import StarRating from './StarRating';
 
-interface StarRatingProps {
-    rating: number;
-}
+
+
 
 interface Review {
     _id: string;
@@ -74,22 +74,13 @@ const PreviousComments: React.FC = () => {
                         <span className="mx-4">•</span>
                         <span className="mr-1">{`האם קיימות פעילויות וחוגים אחרי צהרים: ${review.afternoonClasses.response ? 'כן' : 'לא'}`}</span>
                     </p>
-                    <h6 className="text-3xl font-bold">{`דרוג כולל של המוסד `}<br /><StarRating rating={review.averageRating} /></h6>
+                    <h6 className="text-3xl font-bold">{`דרוג המוסד `}<br /><StarRating averageRating={review.averageRating} /></h6>
                 </div>
             ))}
         </div>
     );
 };
-const StarRating: React.FC<StarRatingProps> = ({ rating }) => {
-    const roundedRating = Math.round(rating);
-    const stars = Array.from({ length: 5 }, (_, index) => (
-        <span key={index} className={`text-xl ${index < roundedRating ? 'text-yellow-500' : 'text-gray-300'}`}>
-            {index < roundedRating ? '⭐' : '☆'}
-        </span>
-    ));
 
-    return <>{stars}</>;
-};
 const mapReligiousLevel = (level: string): string => {
     switch (level) {
         case 'secular':

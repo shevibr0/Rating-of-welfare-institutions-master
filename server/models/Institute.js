@@ -30,8 +30,11 @@ const InstitutesSchema = new mongoose.Schema({
   GisX: String,
   GisY: String,
   Target_Population_Descr: String,
-  Rating: [{userId:String, count: Number}],
-  avgRating: {count:Number,sum:Number}
+  Rating: [{ userId: String, count: Number }],
+  avgRating: {
+    count: { type: Number, default: 0, min: 0 },
+    sum: { type: Number, default: 0, min: 0 },
+  },
 });
 
 //? create model (collection, schema)

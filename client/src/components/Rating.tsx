@@ -1,6 +1,7 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useParams } from 'react-router';
+import axios from 'axios';
 
 interface RatingFormData {
   [key: string]: {
@@ -12,6 +13,7 @@ interface RatingFormData {
 }
 
 const Rating: React.FC = () => {
+
   const initialFormData: RatingFormData = {
     Collaboration: { rating: 0, comment: '' },
     Maintenance: { rating: 0, comment: '' },
@@ -37,7 +39,13 @@ const Rating: React.FC = () => {
   ];
 
   const [formData, setFormData] = useState<RatingFormData>(initialFormData);
+  const [count, setCount] = useState(0);
+  const [accessToken, setAccessToken] = useState<string | undefined>("");
 
+  useEffect(() => {
+    setAccessToken(Cookies.get('access_token'));
+    console.log("accessToken", accessToken)
+  }, []);
   const params = useParams();
   const id = params["id"]
   const handleBooleanChange = (questionKey: string, value: boolean) => {
@@ -92,10 +100,42 @@ const Rating: React.FC = () => {
 
   const sendReview = async () => {
     try {
-      const accessToken = Cookies.get('access_token');
-      console.log("accessToken", accessToken);
+      console.log('accessToken:', accessToken);
+      const instituteId = id;
+      // Make a POST request to your server to add the new rating
+      const response = await fetch(`http://localhost:3000/institutes/addRating?institutId=${instituteId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          count,
+        }),
+      });
 
-      const response = await fetch(`http://localhost:3000/reviews/addReview/?institutId=653a4f6c4e6b26c828a4fccf`, {
+      console.log('Payload:', JSON.stringify({ count }));
+      console.log('Response status:', response.status);
+      console.log('Response data:', await response.json());
+
+      if (response.ok) {
+        console.log('Rating submitted successfully!');
+        // Additional logic after successful submission
+      } else {
+        console.log('Failed to submit rating.');
+        // Handle failure scenario
+      }
+    } catch (error) {
+      console.error('Error during rating submission:', error);
+      // Handle error scenario
+    }
+
+
+    try {
+      console.log("accessToken", accessToken);
+      const instituteId = id;
+      const response = await fetch(`http://localhost:3000/reviews/addReview/?institutId=${instituteId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -162,7 +202,18 @@ const Rating: React.FC = () => {
       console.error('Error during rating submission:', error);
       // Handle error scenario
     }
+    //   if (response1.status === 200) {
+    //     // Optionally, you can update the local state or navigate to another page
+    //     // For example, navigate back to the InstituteInfo page
+    //     // history.push(`/info/${instituteId}`);
+    //   } else {
+    //     console.error('Failed to add rating');
+    //   }
+    // } catch (error) {
+    //   console.error('Error submitting rating:', error);
+    // }
   };
+
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -170,17 +221,19 @@ const Rating: React.FC = () => {
     // Calculate the total average rating
     const totalRatings = Object.values(formData)
       .filter((item) => item.rating !== undefined)
-      .map((item) => item.rating || 0);
+      .map((item) => item.rating ?? 0);
 
-    const totalAverageRating = totalRatings.length > 0 ? totalRatings.reduce((acc, rating) => acc + rating, 0) / totalRatings.length : 0;
-
+    const newTotalAverageRating = totalRatings.length > 0 ? totalRatings.reduce((acc, rating) => acc + rating, 0) / totalRatings.length : 0;
+    console.log("totalAverageRating", newTotalAverageRating);
     // Add the total average rating to the formData
     setFormData((prevFormData) => ({
       ...prevFormData,
-      averageRating: totalAverageRating,
+      averageRating: newTotalAverageRating,
     }));
-
-    // Send the review data to the server
+    console.log("totalAverageRating2", newTotalAverageRating);
+    // Update the state with the latest totalAverageRating
+    setCount(newTotalAverageRating);
+    console.log("soffi", count)
     await sendReview();
   };
 
