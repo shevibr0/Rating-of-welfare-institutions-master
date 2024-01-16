@@ -47,9 +47,9 @@ Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMj
 
 
 ### delet review
-post http://localhost:3000/reviews/deleteReview?reviewId=658d584d18dd981dc79894f2
+post http://localhost:3000/reviews/deleteReview?reviewId=6599c9b3e12ebbde610691f6
 Content-Type: application/json
-Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwMzU5Njc0MiwiZXhwIjoxNzI5NTE2NzQyfQ.kacEObzN1ArD3ILEq5C9l3u_UO5D1w2gubNsRhrtOyA; Path=/; HttpOnly; Secure; SameSite=None
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwNDY2MjI1NCwiZXhwIjoxNzMwNTgyMjU0fQ.qLmkd-EFnwOZGKGYzyb53o8hc2xUQSl9xYII3y9vKp8; Path=/; HttpOnly; Secure; SameSite=None
 
 ### get review
 get http://localhost:3000/reviews/getReviews/?institutId=653a4f6c4e6b26c828a4fccf&offset=4

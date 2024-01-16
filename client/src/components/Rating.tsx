@@ -1,19 +1,17 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import Cookies from 'js-cookie';
-import { useParams } from 'react-router';
-import axios from 'axios';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { useNavigate, useParams } from 'react-router';
 
 interface RatingFormData {
   [key: string]: {
-    rating?: number;
+    rating?: number | null | undefined;
     comment: string;
-    response?: boolean;
-    religiousLevel?: string;
+    response?: boolean | null | undefined;
+    religiousLevel?: string | null | undefined;
+    reviewId?: string;
   };
 }
 
 const Rating: React.FC = () => {
-
   const initialFormData: RatingFormData = {
     Collaboration: { rating: 0, comment: '' },
     Maintenance: { rating: 0, comment: '' },
@@ -23,7 +21,7 @@ const Rating: React.FC = () => {
     StayOnSaturdaysAndHolidays: { comment: '', response: false },
     isBoardingSchool: { comment: '', response: false },
     emotionalResponse: { rating: 0, comment: '', response: false },
-    afternoonClasses: { rating: 0, comment: '', response: false }
+    afternoonClasses: { rating: 0, comment: '', response: false },
   };
 
   const questions = [
@@ -39,15 +37,11 @@ const Rating: React.FC = () => {
   ];
 
   const [formData, setFormData] = useState<RatingFormData>(initialFormData);
-  const [count, setCount] = useState(0);
   const [accessToken, setAccessToken] = useState<string | undefined>("");
-
-  useEffect(() => {
-    setAccessToken(Cookies.get('access_token'));
-    console.log("accessToken", accessToken)
-  }, []);
   const params = useParams();
-  const id = params["id"]
+  const id = params["id"];
+  const nav = useNavigate();
+
   const handleBooleanChange = (questionKey: string, value: boolean) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -98,143 +92,111 @@ const Rating: React.FC = () => {
     }));
   };
 
-  const sendReview = async () => {
+  const sendReview = async (newTotalAverageRating: number, reviewId: string) => {
     try {
-      console.log('accessToken:', accessToken);
       const instituteId = id;
-      // Make a POST request to your server to add the new rating
-      const response = await fetch(`http://localhost:3000/institutes/addRating?institutId=${instituteId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
+
+      const requestData = {
+        Collaboration: {
+          comment: formData.Collaboration.comment || '',
+          rating: formData.Collaboration.rating || null,
+          response: formData.Collaboration.response || false,
         },
-        credentials: 'include',
-        body: JSON.stringify({
-          count,
+        Maintenance: {
+          comment: formData.Maintenance.comment || '',
+          rating: formData.Maintenance.rating || null,
+          response: formData.Maintenance.response || false,
+        },
+        ReligiousLevel: {
+          comment: formData.ReligiousLevel.comment || '',
+          rating: formData.ReligiousLevel.rating || null,
+          enum: formData.ReligiousLevel.religiousLevel ? [formData.ReligiousLevel.religiousLevel] : null,
+        },
+        AdjacentPsychiatrist: {
+          comment: formData.AdjacentPsychiatrist.comment || '',
+          response: formData.AdjacentPsychiatrist.response || false,
+        },
+        HostFamilyOption: {
+          comment: formData.HostFamilyOption.comment || '',
+          response: formData.HostFamilyOption.response || false,
+        },
+        StayOnSaturdaysAndHolidays: {
+          comment: formData.StayOnSaturdaysAndHolidays.comment || '',
+          response: formData.StayOnSaturdaysAndHolidays.response || false,
+        },
+        isBoardingSchool: {
+          comment: formData.isBoardingSchool.comment || '',
+          response: formData.isBoardingSchool.response || false,
+        },
+        emotionalResponse: {
+          comment: formData.emotionalResponse.comment || '',
+          rating: formData.emotionalResponse.rating || null,
+          response: formData.emotionalResponse.response || false,
+        },
+        afternoonClasses: {
+          comment: formData.afternoonClasses.comment || '',
+          rating: formData.afternoonClasses.rating || null,
+          response: formData.afternoonClasses.response || false,
+        },
+        countData: {
+          count: newTotalAverageRating,
+          reviewId: "",
+        },
+      };
+
+      const [responseReview, responseInstitute] = await Promise.all([
+        fetch(`http://localhost:3000/reviews/addReview/?institutId=${instituteId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+          },
+          credentials: 'include',
+          body: JSON.stringify(requestData),
         }),
-      });
+        fetch(`http://localhost:3000/institutes/addRating?institutId=${instituteId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+          },
+          credentials: 'include',
+          body: JSON.stringify(requestData.countData),
+        }),
+      ]);
 
-      console.log('Payload:', JSON.stringify({ count }));
-      console.log('Response status:', response.status);
-      console.log('Response data:', await response.json());
+      console.log('responseReview:', responseReview);
+      console.log('responseInstitute:', responseInstitute);
 
-      if (response.ok) {
-        console.log('Rating submitted successfully!');
-        // Additional logic after successful submission
+      if (responseReview.ok && responseInstitute.ok) {
+        console.log('Rating and count submitted successfully!');
+        nav(`/info/${id}`);
       } else {
-        console.log('Failed to submit rating.');
-        // Handle failure scenario
+        console.log('Failed to submit rating or count.');
       }
     } catch (error) {
-      console.error('Error during rating submission:', error);
-      // Handle error scenario
+      console.error('Error during rating and count submission:', error);
     }
-
-
-    try {
-      console.log("accessToken", accessToken);
-      const instituteId = id;
-      const response = await fetch(`http://localhost:3000/reviews/addReview/?institutId=${instituteId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          Collaboration: {
-            comment: formData.Collaboration.comment || '',
-            rating: formData.Collaboration.rating || null,
-            response: formData.Collaboration.response || false,
-          },
-          Maintenance: {
-            comment: formData.Maintenance.comment || '',
-            rating: formData.Maintenance.rating || null,
-            response: formData.Maintenance.response || false,
-          },
-          ReligiousLevel: {
-            comment: formData.ReligiousLevel.comment || '',
-            rating: formData.ReligiousLevel.rating || null,
-            enum: formData.ReligiousLevel.religiousLevel ? [formData.ReligiousLevel.religiousLevel] : null,
-          },
-          AdjacentPsychiatrist: {
-            comment: formData.AdjacentPsychiatrist.comment || '',
-            response: formData.AdjacentPsychiatrist.response || false,
-          },
-          HostFamilyOption: {
-            comment: formData.HostFamilyOption.comment || '',
-            response: formData.HostFamilyOption.response || false,
-          },
-          StayOnSaturdaysAndHolidays: {
-            comment: formData.StayOnSaturdaysAndHolidays.comment || '',
-            response: formData.StayOnSaturdaysAndHolidays.response || false,
-          },
-          isBoardingSchool: {
-            comment: formData.isBoardingSchool.comment || '',
-            response: formData.isBoardingSchool.response || false,
-          },
-          emotionalResponse: {
-            comment: formData.emotionalResponse.comment || '',
-            rating: formData.emotionalResponse.rating || null,
-            response: formData.emotionalResponse.response || false,
-          },
-          afternoonClasses: {
-            comment: formData.afternoonClasses.comment || '',
-            rating: formData.afternoonClasses.rating || null,
-            response: formData.afternoonClasses.response || false,
-          },
-        }),
-      });
-
-      console.log("formd", formData);
-      console.log('Response status:', response.status);
-      console.log('Response data:', await response.json());
-
-      if (response.ok) {
-        console.log('Rating submitted successfully!');
-        // Additional logic after successful submission
-      } else {
-        console.log('Failed to submit rating.');
-        // Handle failure scenario
-      }
-    } catch (error) {
-      console.error('Error during rating submission:', error);
-      // Handle error scenario
-    }
-    //   if (response1.status === 200) {
-    //     // Optionally, you can update the local state or navigate to another page
-    //     // For example, navigate back to the InstituteInfo page
-    //     // history.push(`/info/${instituteId}`);
-    //   } else {
-    //     console.error('Failed to add rating');
-    //   }
-    // } catch (error) {
-    //   console.error('Error submitting rating:', error);
-    // }
   };
-
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Calculate the total average rating
     const totalRatings = Object.values(formData)
-      .filter((item) => item.rating !== undefined)
-      .map((item) => item.rating ?? 0);
+      .filter((item) => item.rating !== undefined && item.rating !== null)
+      .map((item) => item.rating);
 
-    const newTotalAverageRating = totalRatings.length > 0 ? totalRatings.reduce((acc, rating) => acc + rating, 0) / totalRatings.length : 0;
-    console.log("totalAverageRating", newTotalAverageRating);
-    // Add the total average rating to the formData
+    const newTotalAverageRating =
+      totalRatings.length > 0
+        ? totalRatings.reduce((acc, rating) => acc + (rating as number), 0) / totalRatings.filter((rating) => rating !== 0).length
+        : 0;
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       averageRating: newTotalAverageRating,
     }));
-    console.log("totalAverageRating2", newTotalAverageRating);
-    // Update the state with the latest totalAverageRating
-    setCount(newTotalAverageRating);
-    console.log("soffi", count)
-    await sendReview();
+
+    await sendReview(newTotalAverageRating, formData.countData?.reviewId || '');
   };
 
   return (
@@ -306,9 +268,7 @@ const Rating: React.FC = () => {
                 <textarea
                   dir="rtl"
                   value={formData[key]?.comment || ''}
-                  onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-                    handleCommentChange(key, e.target.value)
-                  }
+                  onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleCommentChange(key, e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-md"
                 />
               </div>

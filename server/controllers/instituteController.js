@@ -36,18 +36,57 @@ const instituteCtrl = {
             next({ stack: error });
         }
     },
-    async addRating({ query, body, payload }, res, next) {
-
+    async addRating({ query, payload, body }, res, next) {
         try {
-            const resp = await Institutes.updateOne({ _id: query.institutId },
+            const existingRating = await Institutes.findOne({
+                '_id': query.institutId,
+                'Rating.userId': payload._id,
+            }).select("Rating avgRating");
+
+            if (existingRating && existingRating.Rating.length > 0) {
+                return res.status(400).json({ msg: "User has already added a rating" });
+            }
+
+            const newRating = {
+                userId: payload._id,
+                ...body,
+            };
+
+            const result = await Institutes.updateOne(
+                { _id: query.institutId },
                 {
-                    $push: { Rating: { userId: payload._id, count: body.count } },
-                    $inc: { "avgRating.sum": body.count, "avgRating.count": 1 }
-                })
-            console.log(resp)
-            return res.status(200).send("rating adedd succsess")
+                    $push: { Rating: newRating },
+                    $inc: {
+                        'avgRating.count': 1,
+                        'avgRating.sum': newRating.count,
+                    },
+                }
+            );
+
+            // Check if the institute document exists after the update operation
+            const updatedInstitute = await Institutes.findById(query.institutId);
+
+            if (updatedInstitute) {
+                // The update was successful, response updated
+                // Now, recalculate the average rating
+                const newAverageRating =
+                    updatedInstitute.avgRating.count > 0
+                        ? updatedInstitute.avgRating.sum / updatedInstitute.avgRating.count
+                        : 0;
+
+                // Update the average rating in the institute document
+                await Institutes.updateOne(
+                    { _id: query.institutId },
+                    { $set: { "avgRating.averageRating": newAverageRating } }
+                );
+
+                res.status(201).json({ msg: "Rating added successfully" });
+            } else {
+                res.status(400).json({ msg: "Failed to add rating" });
+            }
         } catch (error) {
-            next({ stack: error })
+            console.error("Error adding rating:", error);
+            next({ stack: error });
         }
     },
     async updateRating({ query, body, payload }, res, next) {
@@ -74,35 +113,50 @@ const instituteCtrl = {
             next({ stack: error })
         }
     },
-
     async deleteRating({ query, body, payload }, res, next) {
         try {
-            const existingRating = await Institutes.findOne({
-                '_id': query.institutId,
-                'Rating.userId': payload._id
-            }).select("Rating avgRating")
-            console.log(existingRating)
-            let countRating = 0;
-            for (const rating of existingRating.Rating) {
-                if (rating.userId == payload._id) {
-                    countRating = rating.count
-                    break;
-                }
-            }
-            const result = await Institutes.updateOne(
-                { _id: query.institutId },
-                {
-                    $pull: {
-                        Rating: { userId: payload._id },
-                    },
-                    $inc: {
-                        'avgRating.count': -1, // Decrease the count by 1
-                        'avgRating.sum': -countRating, // Decrease the sum by the user's count
-                    },
-                }
-            );
-            console.log(result)
+            const userId = payload._id;
+            const reviewId = query.reviewId;
+            const institutId = body.institutId;
+            const existingReview = await Reviews.findOne({ _id: reviewId, userId });
 
+            if (!existingReview) {
+                return res.status(404).json({ msg: "Review not found" });
+            }
+
+            if (existingReview.Rating && existingReview.Rating.length > 0) {
+                await deleteRating({ query: { institutId, commentId: reviewId }, payload }, res, next);
+            }
+
+            const { deletedCount } = await Reviews.deleteOne({ _id: reviewId, userId });
+
+            if (deletedCount) {
+                const existingRating = await Institutes.findOne({
+                    '_id': institutId,
+                    'Rating.userId': userId
+                }).select("Rating avgRating");
+
+                const result = await Institutes.updateOne(
+                    { _id: institutId },
+                    {
+                        $pull: {
+                            Rating: { userId },
+                        },
+                        $inc: {
+                            'avgRating.count': -1,
+                            'avgRating.sum': -existingReview.count, // Use existingReview.count
+                        },
+                    }
+                );
+
+                if (result.ok === 1) {
+                    res.status(200).json({ msg: "Deleted successfully" });
+                } else {
+                    res.status(500).json({ msg: "Failed to update Institutes collection" });
+                }
+            } else {
+                res.status(404).json({ msg: "Review not found" });
+            }
         } catch (error) {
             next({ stack: error });
         }

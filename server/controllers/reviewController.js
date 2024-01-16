@@ -1,4 +1,5 @@
 import { Reviews } from '../models/reviewsModel.js'
+import Institutes from '../models/Institute.js';
 
 
 const reviewCtrl = {
@@ -23,6 +24,15 @@ const reviewCtrl = {
   },
   async addReview({ query, body, payload }, res, next) {
     try {
+      const userId = payload._id;
+      const institutId = body.institutId;
+
+      // Check if the user has already added a review
+      const existingReview = await Reviews.findOne({ institutId, userId });
+
+      if (existingReview) {
+        return res.status(400).json({ msg: "User has already added a review" });
+      }
       // Extract data from the request body
       const {
         Collaboration,
@@ -94,26 +104,76 @@ const reviewCtrl = {
     } catch (error) {
       next({ stack: error });
     }
-  }
-  ,
-  async deleteReview({ query, payload }, res, next) {
-    try {
-      // Extract userId from the payload
-      const userId = payload._id;
+  },
 
-      // Extract userId from the query parameters (if it's included in the request)
+  async deleteReview({ query, body, payload }, res, next) {
+    try {
+      const userId = payload._id;
       const reviewId = query.reviewId;
-      const { deletedCount } = await Reviews.deleteOne({ _id: reviewId, userId })
+      const institutId = body.institutId;
+      console.log("institutIddddd", institutId)
+      console.log("reviewIddd", reviewId)
+      console.log("userId", userId)
+
+      const existingReview = await Reviews.findOne({ _id: reviewId, userId });
+
+      if (!existingReview) {
+        return res.status(404).json({ msg: "Review not found" });
+      }
+
+      // Check if 'Rating' property exists before accessing it
+      if (existingReview.Rating) {
+        // Call the deleteRating function to update the average and count
+        await deleteRating({ query: { institutId }, body, payload }, res, next);
+      }
+
+      // Delete the review
+      const { deletedCount } = await Reviews.deleteOne({ _id: reviewId, userId });
 
       if (deletedCount) {
-        return res.status(200).json({ msg: "deleted successful" })
+        // Update the Institutes collection
+        const existingRating = await Institutes.findOne({
+          '_id': institutId,
+          'Rating.userId': userId
+        }).select("Rating avgRating");
+
+        // Check if 'existingRating' is truthy before accessing its properties
+        if (existingRating) {
+          let countRating = 0;
+
+          for (const rating of existingRating.Rating) {
+            if (rating.userId == userId) {
+              countRating = rating.count;
+              break;
+            }
+          }
+
+          const result = await Institutes.updateOne(
+            { _id: institutId },
+            {
+              $pull: {
+                Rating: { userId },
+              },
+              $inc: {
+                'avgRating.count': -1, // Decrease the count by 1
+                'avgRating.sum': -countRating, // Decrease the sum by the user's count
+              },
+            }
+          );
+
+          if (result.ok === 1) {
+            return res.status(200).json({ msg: "Deleted successfully" });
+          } else {
+            return res.status(500).json({ msg: "Failed to update Institutes collection" });
+          }
+        } else {
+          return res.status(404).json({ msg: "Institute not found" });
+        }
+      } else {
+        return res.status(404).json({ msg: "Review not found" });
       }
-      else {
-        next(true)
-      }
-    }
-    catch (stack) {
-      next({ stack })
+    } catch (error) {
+      next({ stack: error });
     }
   }
 }
