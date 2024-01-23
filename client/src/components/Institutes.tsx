@@ -24,8 +24,9 @@ const Institutes = () => {
   //})
 
   return (
+
     <div>
-      <input className="left-[1220px] top-[349px] absolute text-black text-xl font-normal font-['Inter']" onChange={e => setSearchValue(e.target.value)} type="search" placeholder='search' />
+      <input className="w-[756px] h-[51px] bg-white border-2 border-amber-500" onChange={e => setSearchValue(e.target.value)} type="search" placeholder='חיפוש מוסד' />
       <Institute data={data} />
     </div>
     // {/* <Intersector width={500} height={500} background={"red"} /> */ }

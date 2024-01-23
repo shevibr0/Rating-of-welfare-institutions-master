@@ -12,7 +12,10 @@ router.post("/addRating", auth, instituteCtrl.addRating)
 router.post("/updateRating", auth, instituteCtrl.updateRating)
 router.post("/deleteRating", auth, instituteCtrl.deleteRating)
 router.get("/search", auth, instituteCtrl.search)
+router.get("/searchByCategory", auth, instituteCtrl.searchByCategory)
 router.get("/categories", auth, instituteCtrl.getCategories)
+router.get("/getByCategories", auth, instituteCtrl.getByCategories)
+
 
 
 

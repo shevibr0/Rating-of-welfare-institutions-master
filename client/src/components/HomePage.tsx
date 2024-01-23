@@ -6,19 +6,21 @@ const HomePage = () => {
   return (
     <div className="w-[1920px] h-[1080px] relative bg-white">
       <div className="left-[1535px] top-[61px] absolute text-black text-3xl font-normal font-['Inter']">אודות</div>
-      <div className="left-[1189px] top-[61px] absolute text-black text-3xl font-normal font-['Inter']">מוסדות בארץ</div>
-      <div className="left-[306px] top-[61px] absolute text-black text-3xl font-normal font-['Inter']">צור קשר</div>
+      <div onClick={() => nav('/institutes')} className="left-[1189px] top-[61px] absolute text-black text-3xl font-normal font-['Inter']">
+        מוסדות בארץ
+      </div>
+      <div onClick={() => nav('/contact')} className="left-[306px] top-[61px] absolute text-black text-3xl font-normal font-['Inter']">צור קשר</div>
       <div className="w-[999px] h-[826px] left-[727px] top-[188px] absolute border border-black" />
       <div className="w-[603px] h-[720px] left-[194px] top-[238px] absolute bg-zinc-300" />
       <div className="left-[368px] top-[532px] absolute text-black text-[40px] font-normal font-['Inter']">תמונת פרופיל</div>
       <div className="w-[771px] h-[584px] left-[885px] top-[346px] absolute text-right text-black text-xl font-normal font-['Inter'] leading-[45px]">מפה לע”וס<br />הי שמי אלישבע אינהורן עובדת סוציאלית ומפתחת תוכנה<br />עבדתי 6 שנים בלשכות רווחה. במהלך שנות עבודתי נתקלתי רבות בצורך בחיפוש מידע עדכני שך איש קשר, סוג האוכלוסייה אודות מוסדות כמו פנימיות , מעונות יום, מועדניות ועוד  אך לא מצאתי אתר מסודר בו ניתן למצוא את כל המוסדות הרווחה בארץ ולקרוא תגובות וחוות דעת של עו”סיות אחרות על המקום. בשל כך החלטתי לבנות מענה לצורך זה עבור עוסים ועוסיות בכל רחבי הארץ אשר בכח השיתוף והדירוג של מוסדות שביקרו בהם יעזרו לעוסים אחרים ויוכלו להנות ממידעמעודכן ומאימן מוזמנת להוסיף חוות דעת ודירוג אודות מוסדות שהכרת באופן אישי ולהנות ממידע המתעדכן בזמן אמת<br /></div>
-      <div className="left-[567px] top-[64px] absolute text-black text-3xl font-normal font-['Inter']">3 מוסדות בדירוג הגבוה ביותר</div>
+      <div onClick={() => nav('/threeTop')} className="left-[567px] top-[64px] absolute text-black text-3xl font-normal font-['Inter']">3 מוסדות בדירוג הגבוה ביותר</div>
       <div className="w-[99px] h-[0px] left-[1522px] top-[117px] absolute border-2 border-black"></div>
       <div className="w-[488px] h-[61px] left-[1026px] top-[897px] absolute bg-zinc-300 border border-black" />
-      <button className="left-[1081px] top-[903px] absolute text-right text-black text-[28px] font-normal font-['Inter'] leading-[45px]" onClick={() => nav("/institutes")}>
+      <button className="left-[1081px] top-[903px] absolute text-right text-black text-[28px] font-normal font-['Inter'] leading-[45px]" onClick={() => nav("/institutesCategory")}>
         הקליקי לכל מוסדות הרווחה בארץ
       </button>
-    </div>
+    </div >
     // <div className="w-[1920px] h-[1080px] relative bg-white">
     //   <img src="src/assents/profile.jpg" alt="Your Alt Text" className="w-60 h-60 rounded-full mr-8" />
 

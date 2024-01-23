@@ -32,8 +32,8 @@ const Rating: React.FC = () => {
     { key: 'HostFamilyOption', text: 'האם יש אפשרות למשפחה מארחת' },
     { key: 'StayOnSaturdaysAndHolidays', text: 'האם יש אפשרות לשהות במסגרת בשבתות וחגים' },
     { key: 'isBoardingSchool', text: 'האם יש מוסד לימודים בתוך הפנימייה' },
-    { key: 'emotionalResponse', text: 'האם יש מענה רגשי במוסד', hasRating: true },
-    { key: 'afternoonClasses', text: 'האם קיימות פעילויות וחוגים אחרי צהרים', hasRating: true },
+    { key: 'emotionalResponse', text: 'מה רמת המענה רגשי במוסד', hasRating: true },
+    { key: 'afternoonClasses', text: 'מה רמת הפעילויות וחוגים אחרי צהרים', hasRating: true },
   ];
 
   const [formData, setFormData] = useState<RatingFormData>(initialFormData);
@@ -68,6 +68,8 @@ const Rating: React.FC = () => {
       questionKey !== 'StayOnSaturdaysAndHolidays' &&
       questionKey !== 'AdjacentPsychiatrist' &&
       questionKey !== 'isBoardingSchool' &&
+      questionKey !== 'emotionalResponse' &&
+      questionKey !== 'afternoonClasses' &&
       !questions.find((q) => q.key === questionKey)?.hasRating
     );
   };
@@ -209,7 +211,7 @@ const Rating: React.FC = () => {
               <p className="text-lg font-semibold mb-2 text-right">{text}</p>
               {key === 'ReligiousLevel' ? (
                 <div className="flex space-x-4 text-right">
-                  {['ultra-Orthodox', 'secular', 'religious'].map((option) => (
+                  {['חרדי', 'חילוני', 'דתי'].map((option) => (
                     <label key={option} className="flex items-center text-right">
                       <input
                         type="radio"

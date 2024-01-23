@@ -176,6 +176,25 @@ const reviewCtrl = {
       next({ stack: error });
     }
   }
+  ,
+  async getReviewDetails({ query, body, payload }, res, next) {
+    try {
+      const reviewId = query.reviewId;
+      console.log("reviewId", reviewId);
+      const reviewDetails = await Reviews.findById(reviewId).populate({ path: "userId", select: "name" });
+      console.log("reviewDetails", reviewDetails);
+
+      if (!reviewDetails) {
+        return res.status(404).json({ msg: "Review details not found" });
+      }
+
+      // Wrap the result in an array before sending the response
+      res.status(200).json([reviewDetails]);
+    } catch (error) {
+      next({ stack: error, message: "Failed to get review details" });
+    }
+  }
 }
+
 
 export default reviewCtrl

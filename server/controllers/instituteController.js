@@ -160,7 +160,46 @@ const instituteCtrl = {
         } catch (error) {
             next({ stack: error });
         }
+    }, async searchByCategory({ query, body, payload }, res, next) {
+        try {
+            console.log('Received request with params:', query);
+            const { limit, offset, search, category } = query;
+            let institutes = [];
+            const searchValue = new RegExp(search, 'i');
+            let categoryFilter = {};
+
+            if (category) {
+                // If a category is provided, include it in the filter
+                categoryFilter = { Type_Descr: category };
+            }
+
+            let searchConditions = {
+                ...categoryFilter,
+                $or: [
+                    { Name: searchValue },
+                    { Head_Department: searchValue },
+                    { Region_Descr: searchValue },
+                    { City_Name: searchValue }
+                ]
+            };
+
+            if (limit) {
+                institutes = await Institutes.find(searchConditions).limit(limit).skip(offset || 0);
+            } else {
+                institutes = await Institutes.find(searchConditions);
+                return res.status(200).json(institutes);
+            }
+
+            return res.status(200).json({
+                institutes,
+                next: process.env.SERVER_URL + `/Institutes/search/?limit=${limit}&offset=${parseInt(limit) + (parseInt(offset) || 0)}&search=${search}&category=${category}`,
+            });
+
+        } catch (error) {
+            next({ stack: error });
+        }
     },
+
     async search({ query, body, payload }, res, next) {
         try {
             const { limit, offset } = query
