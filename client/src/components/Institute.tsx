@@ -12,7 +12,6 @@ const Institute = () => {
 
     useEffect(() => {
         GetAllInstitutes()
-        // Include selectedCategory in the dependency array
         onSearch();
     }, [searchValue]);
 
@@ -20,7 +19,7 @@ const Institute = () => {
         try {
 
             const encodedSearchValue = encodeURIComponent(searchValue);
-            const { data } = await axios.get(`http://localhost:3000/institutes/search/?limit=15&search=${encodedSearchValue}`);
+            const { data } = await axios.get(`http://localhost:3000/institutes/search/?limit=120&search=${encodedSearchValue}`);
             setData(data.institutes);
         } catch (error) {
             console.log('failed');
@@ -41,7 +40,7 @@ const Institute = () => {
 
 
     return (
-        <div className="flex flex-wrap -mx-4">
+        <div className="flex flex-wrap">
             <div className="w-full px-4 mb-8 flex items-center justify-center">
 
                 <button onClick={() => nav('/institutesCategory')}>חפש לפי קטגוריות</button>
@@ -51,7 +50,7 @@ const Institute = () => {
                     onChange={(e) => {
                         setSearchValue(e.target.value);
                         debouncedSearch();
-                        // Call the debounced search function as the user types
+
                     }}
                     value={searchValue}
                     type="search"

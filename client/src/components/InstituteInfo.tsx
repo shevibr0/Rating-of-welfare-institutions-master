@@ -168,6 +168,9 @@ const InstituteInfo: React.FC = () => {
             <button className="flex items-center font-semibold mb-2 mt-4 border border-purple-500 text-purple-500 p-2 rounded-md mx-auto" onClick={() => nav(`/info/${id}/previousComments`)}>
               לקריאת תגובות קודמות
             </button>
+            <button className="flex items-center font-semibold mb-2 mt-4 border border-purple-500 text-purple-500 p-2 rounded-md mx-auto" onClick={() => nav(`/info/${id}/pictures`)}>
+              לצפייה בתמונות של המסגרת
+            </button>
           </div>
         </div>
 

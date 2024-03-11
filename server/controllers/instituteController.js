@@ -1,7 +1,44 @@
 import Institutes from "../models/Institute.js"
 import { Category } from "../models/categoryModel.js"
+import nodemailer from 'nodemailer';
+const transporter = nodemailer.createTransport({
+    // Configure your email transport options here, such as SMTP or SendGrid
+    // Example SMTP configuration:
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+        user: 'mepe.leos@gmail.com',
+        // pass: 'mepeleos11',
+        pass: 'ruls jjcj roya weub',
+    },
+    tls: {
+        rejectUnauthorized: false // Disable certificate verification
+    }
+});
 
 const instituteCtrl = {
+    async sendEmail(req, res, next) {
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+        try {
+            const { link, email, id, to, subject, text } = req.body; // Assuming these details are provided in the request body
+
+            const emailText = `${text}\n\nFrom Email: ${email}\nInstitution ID: ${id}\nLink: ${link}`;
+            // Send email
+            await transporter.sendMail({
+                from: 'mepe.leos@gmail.com', // Sender email address
+                to,
+                subject,
+                text: emailText,
+            });
+
+            res.status(200).json({ message: 'Email sent successfully' });
+        } catch (error) {
+            console.error('Error sending email:', error);
+            next({ stack: error });
+        }
+    }
+    ,
     async getInstitutes({ query, body, payload }, res, next) {
         const { limit, offset } = query
         try {
@@ -27,7 +64,6 @@ const instituteCtrl = {
             const institute = await Institutes.findById(query.id);
 
             if (!institute) {
-                console.log("in", institute)
                 return res.status(404).json({ message: "Institute not found" });
             }
 
@@ -43,7 +79,7 @@ const instituteCtrl = {
                 'Rating.userId': payload._id,
             }).select("Rating avgRating");
 
-            if (existingRating && existingRating.Rating.length > 0) {
+            if (existingRating) {
                 return res.status(400).json({ msg: "User has already added a rating" });
             }
 
@@ -51,6 +87,9 @@ const instituteCtrl = {
                 userId: payload._id,
                 ...body,
             };
+            if (!newRating.count || typeof newRating.count !== 'number' || isNaN(newRating.count)) {
+                newRating.count = 0; // Set count to 0 if it's not provided or not a valid number
+            }
 
             const result = await Institutes.updateOne(
                 { _id: query.institutId },
@@ -63,27 +102,27 @@ const instituteCtrl = {
                 }
             );
 
-            // Check if the institute document exists after the update operation
-            const updatedInstitute = await Institutes.findById(query.institutId);
+            // Check if the update was successful
+            if (result && result.nModified > 0) {
+                // Update the average rating
+                const updatedInstitute = await Institutes.findById(query.institutId);
 
-            if (updatedInstitute) {
-                // The update was successful, response updated
-                // Now, recalculate the average rating
-                const newAverageRating =
-                    updatedInstitute.avgRating.count > 0
-                        ? updatedInstitute.avgRating.sum / updatedInstitute.avgRating.count
-                        : 0;
+                if (updatedInstitute) {
+                    const newAverageRating =
+                        updatedInstitute.avgRating.count > 0
+                            ? updatedInstitute.avgRating.sum / updatedInstitute.avgRating.count
+                            : 0;
 
-                // Update the average rating in the institute document
-                await Institutes.updateOne(
-                    { _id: query.institutId },
-                    { $set: { "avgRating.averageRating": newAverageRating } }
-                );
+                    await Institutes.updateOne(
+                        { _id: query.institutId },
+                        { $set: { "avgRating.averageRating": newAverageRating } }
+                    );
 
-                res.status(201).json({ msg: "Rating added successfully" });
-            } else {
-                res.status(400).json({ msg: "Failed to add rating" });
+                    return res.status(201).json({ msg: "Rating added successfully" });
+                }
             }
+
+            return res.status(400).json({ msg: "Failed to add rating" });
         } catch (error) {
             console.error("Error adding rating:", error);
             next({ stack: error });
@@ -96,7 +135,7 @@ const instituteCtrl = {
                 '_id': query.institutId,
                 'Rating.userId': payload._id
             }).select("Rating avgRating")
-            console.log(existingRating)
+
             const sumRating = existingRating.avgRating.sum;
             existingRating.avgRating.sum -= sumRating;
             existingRating.avgRating.sum += body.count;
@@ -144,7 +183,7 @@ const instituteCtrl = {
                         },
                         $inc: {
                             'avgRating.count': -1,
-                            'avgRating.sum': -existingReview.count, // Use existingReview.count
+                            'avgRating.sum': -existingReview.count,
                         },
                     }
                 );
@@ -162,7 +201,7 @@ const instituteCtrl = {
         }
     }, async searchByCategory({ query, body, payload }, res, next) {
         try {
-            console.log('Received request with params:', query);
+
             const { limit, offset, search, category } = query;
             let institutes = [];
             const searchValue = new RegExp(search, 'i');

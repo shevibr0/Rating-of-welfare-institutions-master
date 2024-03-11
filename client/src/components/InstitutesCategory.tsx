@@ -30,7 +30,7 @@ const InstitutesCategory = () => {
 
 
     return (
-        <div className="flex flex-wrap -mx-4">
+        <div className="flex flex-wrap">
             <div className="w-full px-4 mb-8 flex items-center justify-center">
                 <button onClick={() => nav('/institutes')}>בחר את כל המוסדות הרווחה בארץ</button>
 

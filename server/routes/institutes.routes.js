@@ -15,6 +15,7 @@ router.get("/search", auth, instituteCtrl.search)
 router.get("/searchByCategory", auth, instituteCtrl.searchByCategory)
 router.get("/categories", auth, instituteCtrl.getCategories)
 router.get("/getByCategories", auth, instituteCtrl.getByCategories)
+router.post("/sendEmail", auth, instituteCtrl.sendEmail)
 
 
 

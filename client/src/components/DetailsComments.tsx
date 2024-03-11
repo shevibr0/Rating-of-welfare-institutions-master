@@ -27,11 +27,11 @@ const DetailsComments: React.FC = () => {
     }, []);
 
     const fetchReviewDetails = async () => {
-        console.log("reviewId", reviewId);
+
         try {
             const { data } = await axios.get(`http://localhost:3000/reviews/getReviewDetails/?reviewId=${reviewId}`);
-            console.log("response", data);
-            setData(data); // Assuming your API response contains the review details
+
+            setData(data);
         } catch (error) {
             console.error("Failed to fetch review details", error);
         }
@@ -86,7 +86,7 @@ const mapReligiousLevel = (level: string): string => {
         case 'חרדי':
             return 'חרדי';
         default:
-            return level; // If the level is not one of the expected values, return as is
+            return level;
     }
 };
 

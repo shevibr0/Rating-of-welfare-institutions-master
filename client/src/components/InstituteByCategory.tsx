@@ -7,59 +7,29 @@ const InstituteByCategory = () => {
     const nav = useNavigate();
     const [institutes, setInstitutes] = useState([]);
     const [searchValue, setSearchValue] = useState("")
-    const [page, setPage] = useState(1); // Track the current page
-    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(1);
+
 
     const params = useParams();
     const name = params["id"]
+
+
     useEffect(() => {
-        // Call the function to fetch and display institutes based on the selected category
-        console.log("name", name)
-        loadMoreData()
+        fetchInstitutesByCategory(searchValue)
 
     }, []);
+
+
     useEffect(() => {
-        // Call the function to fetch and display institutes based on the selected category
 
         searchInstitutesByCategory()
     }, [searchValue]);
 
-    useEffect(() => {
-        // Add a scroll event listener to trigger loading more data
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-    const handleScroll = () => {
-        // Check if the user has scrolled to the bottom
-        if (
-            window.innerHeight + document.documentElement.scrollTop ===
-            document.documentElement.offsetHeight
-        ) {
-            // Load more data when the user reaches the bottom
-            loadMoreData();
-        }
-    };
 
-    const loadMoreData = async () => {
-        if (!loading) {
-            try {
-                setLoading(true);
-                const { data } = await axios.get(`http://localhost:3000/institutes/getByCategories?category=${name}&limit=12&page=${page + 1}`);
-                setInstitutes((prevInstitutes) => [...prevInstitutes, ...data.institutes]);
-                setPage((prevPage) => prevPage + 1);
-            } catch (error) {
-                console.log('Failed to fetch more institutes', error);
-            } finally {
-                setLoading(false);
-            }
-        }
-    };
 
     const fetchInstitutesByCategory = async (categoryName: any) => {
         try {
-            const { data } = await axios.get(`http://localhost:3000/institutes/getByCategories?category=${categoryName}&limit=140`);
+            const { data } = await axios.get(`http://localhost:3000/institutes/getByCategories?category=${categoryName}&limit=12000`);
             setInstitutes(data.institutes);
         } catch (error) {
             console.log('Failed to fetch institutes by category', error);
@@ -70,7 +40,7 @@ const InstituteByCategory = () => {
 
             const { data } = await axios.get(`http://localhost:3000/institutes/searchByCategory`, {
                 params: {
-                    limit: 12,
+                    limit: 120,
                     search: searchValue,
                     category: name, // Pass the category to the server
                 },

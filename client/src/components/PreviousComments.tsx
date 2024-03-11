@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import StarRating from './StarRating';
 import Cookies from 'js-cookie';
-import UserContext, { User } from '../context/userContext';
+
 
 
 
@@ -27,19 +27,18 @@ interface Review {
 
 const PreviousComments: React.FC = () => {
     const nav = useNavigate();
-    const { user } = useContext(UserContext);
     const { id } = useParams<{ id: string }>();
     const [data, setData] = useState<Review[]>([]);
     const [accessToken, setAccessToken] = useState<string | undefined>("");
 
     useEffect(() => {
         fetchReviews();
-
     }, []);
 
     const fetchReviews = async () => {
         const token = Cookies.get('access_token');
         setAccessToken(token);
+        console.log("accessTokennnnnnn", accessToken);
         try {
             const { data } = await axios.get(`http://localhost:3000/reviews/getReviews/?institutId=${id}&offset=4`);
             console.log('API response:', data);
@@ -49,8 +48,8 @@ const PreviousComments: React.FC = () => {
         }
     };
     const handleDelete = async (reviewId: string) => {
+        setData(prevData => prevData.filter(review => review._id !== reviewId));
         try {
-            // Step 1: Delete the review
             const deleteReviewResponse = await axios.post(
                 `http://localhost:3000/reviews/deleteReview?reviewId=${reviewId}`,
                 { institutId: id },
@@ -135,7 +134,7 @@ const mapReligiousLevel = (level: string): string => {
         case 'חרדי':
             return 'חרדי';
         default:
-            return level; // If the level is not one of the expected values, return as is
+            return level;
     }
 };
 

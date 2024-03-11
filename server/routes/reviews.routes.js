@@ -7,8 +7,11 @@ const router = express.Router();
 
 router.get('/getReviews', auth, reviewCtrl.getReviews)
 router.get('/getReviewDetails', auth, reviewCtrl.getReviewDetails)
+router.post('/getReviewIdByInstitutesId', auth, reviewCtrl.getReviewIdByInstitutesId)
 router.post('/addReview', auth, reviewCtrl.addReview)
 router.post('/deleteReview', auth, reviewCtrl.deleteReview)
+router.post('/uploadImages', auth, reviewCtrl.uploadImages)
+
 
 
 

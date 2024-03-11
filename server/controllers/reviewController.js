@@ -1,6 +1,16 @@
 import { Reviews } from '../models/reviewsModel.js'
 import Institutes from '../models/Institute.js';
-
+import { v2 as cloudinary } from 'cloudinary';
+import { config } from "dotenv"
+import { Image } from "../models/pictures.js"
+import dotenv from 'dotenv';
+dotenv.config();
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true
+});
 
 const reviewCtrl = {
   async getReviews({ query, body, payload }, res, next) {
@@ -25,7 +35,8 @@ const reviewCtrl = {
   async addReview({ query, body, payload }, res, next) {
     try {
       const userId = payload._id;
-      const institutId = body.institutId;
+      const institutId = query.institutId;
+
 
       // Check if the user has already added a review
       const existingReview = await Reviews.findOne({ institutId, userId });
@@ -105,15 +116,62 @@ const reviewCtrl = {
       next({ stack: error });
     }
   },
+  async uploadImages(req, res) {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    try {
+      const uploadedImages = req.files; // Storing uploaded files in uploadedImages variable
+      if (!uploadedImages) {
+        return res.status(400).json({ error: 'No images uploaded' });
+      }
 
+      const uploadedImageUrls = await Promise.all(Object.values(uploadedImages).map(async (image) => {
+        try {
+          // Upload image to Cloudinary
+          const uploadOptions = {
+            upload_preset: 'smqqbj8u',
+            allowed_formats: ['png', 'jpg', 'jpeg', 'svg', 'ico', 'jfif', 'webp'],
+          };
+          const upload = await cloudinary.uploader.upload(image.tempFilePath, uploadOptions);
+          // Check if an image document exists for the given institution ID
+          let imageDocument = await Image.findOne({ institutionCode: req.body.institutId });
+
+          if (imageDocument) {
+            // If an image document exists, update the existing document by pushing the new image URL
+            imageDocument.images.push(upload.secure_url);
+          } else {
+            // If no image document exists, create a new document with the institution ID and the new image URL
+            imageDocument = new Image({
+              userId: req.payload._id,
+              institutionCode: req.body.institutId,
+              cloudinaryPublicId: upload.public_id,
+              images: [upload.secure_url]
+            });
+          }
+
+          // Save the updated or new Image document to the database
+          await imageDocument.save();
+          // Return the secure_url
+          return upload.secure_url;
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          throw error;
+        }
+      }));
+
+      res.json({ imageUrls: uploadedImageUrls });
+
+    } catch (error) {
+      console.error("Error during image upload:", error);
+      res.status(500).json({ error: 'Failed to upload images' });
+    }
+  }
+  ,
   async deleteReview({ query, body, payload }, res, next) {
     try {
       const userId = payload._id;
       const reviewId = query.reviewId;
       const institutId = body.institutId;
-      console.log("institutIddddd", institutId)
-      console.log("reviewIddd", reviewId)
-      console.log("userId", userId)
+
 
       const existingReview = await Reviews.findOne({ _id: reviewId, userId });
 
@@ -177,12 +235,36 @@ const reviewCtrl = {
     }
   }
   ,
+  async getReviewIdByInstitutesId(req, res, next) {
+    try {
+      const { instituteId, userId } = req.query;
+      let query = {};
+
+      if (instituteId) {
+        query.InstitutesId = instituteId;
+      }
+
+      if (userId) {
+        query.userId = userId;
+      }
+
+      const review = await Reviews.findOne(query, '_id');
+
+      if (review) {
+        res.status(200).json({ reviewId: review._id });
+      } else {
+        res.status(404).json({ message: 'Review not found for the given parameters' });
+      }
+    } catch (error) {
+      console.error('Error fetching review id:', error);
+      next(error);
+    }
+  },
   async getReviewDetails({ query, body, payload }, res, next) {
     try {
       const reviewId = query.reviewId;
-      console.log("reviewId", reviewId);
       const reviewDetails = await Reviews.findById(reviewId).populate({ path: "userId", select: "name" });
-      console.log("reviewDetails", reviewDetails);
+
 
       if (!reviewDetails) {
         return res.status(404).json({ msg: "Review details not found" });

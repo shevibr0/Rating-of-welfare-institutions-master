@@ -1,0 +1,7 @@
+.textarea-placeholder::placeholder {
+    text-align: right;
+    color: #805ad5; /* Set your desired color */
+    font-size: 30px; /* Set your desired font size */
+    font-weight: normal; /* Set your desired font weight */
+    font-family: 'Inter'; /* Set your desired font family */
+}
