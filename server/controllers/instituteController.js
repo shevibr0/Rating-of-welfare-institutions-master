@@ -39,6 +39,15 @@ const instituteCtrl = {
         }
     }
     ,
+    async getInstitutesCount(req, res, next) {
+        try {
+            const count = await Institutes.countDocuments();
+            res.status(200).json({ count });
+        } catch (error) {
+            next({ stack: error });
+        }
+
+    },
     async getInstitutes({ query, body, payload }, res, next) {
         const { limit, offset } = query
         try {

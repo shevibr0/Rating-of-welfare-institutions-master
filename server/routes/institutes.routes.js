@@ -7,6 +7,7 @@ const router = express.Router();
 
 
 router.get("/getInstitutesById", auth, instituteCtrl.getInstituteById)
+router.get("/getInstitutesCount", auth, instituteCtrl.getInstitutesCount)
 router.get("/getInstitutes", auth, instituteCtrl.getInstitutes)
 router.post("/addRating", auth, instituteCtrl.addRating)
 router.post("/updateRating", auth, instituteCtrl.updateRating)
