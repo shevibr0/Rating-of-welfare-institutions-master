@@ -87,7 +87,7 @@ const InstitutesCategory = () => {
             </div>
             <span className="flex justify-center items-center  text-purple-700 text-5xl font-bold font-['Alef']">חפש מסגרת לפי קטגוריה</span>
             <div className='flex justify-center items-center'>
-                <a href='/institutes' className="ml-5 mt-5 mb-5 text-purple-700 text-sm font-normal font-['Alef'] underline">לחיפוש חופשי לחץ כאן </a>
+                <a href='/institutes' className="ml-5 mt-5 mb-5 text-purple-700 text-sm font-normal font-['Alef']">לחיפוש חופשי לחץ כאן </a>
             </div>
 
             <div className="flex flex-wrap">

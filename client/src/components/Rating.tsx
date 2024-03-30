@@ -57,6 +57,7 @@ const Rating: React.FC = () => {
   const [formData, setFormData] = useState<RatingFormData>(initialFormData);
   const [accessToken, setAccessToken] = useState<string | undefined>("");
   const [review, setReview] = useState<Review | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
   const params = useParams();
   const id = params["id"];
   const nav = useNavigate();
@@ -324,118 +325,182 @@ const Rating: React.FC = () => {
 
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-purple-100 text-right">
-      <div className="w-full max-w-7xl mx-auto bg-white p-8 rounded-lg shadow-md text-right">
-        <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-purple-800 text-center">דרגו את החוויה שלכם</h2>
-        <form onSubmit={handleSubmit} className="w-full" encType="multipart/form-data">
-          {questions.map(({ key, text, hasRating }) => (
-            <div key={key} className="mb-4">
-              <p className="text-lg font-semibold mb-2 text-right">{text}</p>
-              {key === 'ReligiousLevel' ? (
-                <div className="flex space-x-4 text-right">
-                  {['חרדי', 'חילוני', 'דתי'].map((option) => (
-                    <label key={option} className="flex items-center text-right">
-                      <input
-                        type="radio"
-                        name="ReligiousLevel"
-                        value={option}
-                        onChange={() => handleReligiousLevelChange(option)}
-                        className="mr-1 text-right"
-                      />
-                      {option}
-                    </label>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex space-x-4 text-right">
-                  {hasRating ? (
-                    [1, 2, 3, 4, 5].map((star) => (
-                      <label key={star} className="flex items-center text-right">
-                        <input
-                          type="radio"
-                          name={key}
-                          value={star}
-                          onChange={() => handleRatingChange(key, star)}
-                          className="mr-1 text-right"
-                        />
-                        {star}
-                      </label>
-                    ))
-                  ) : (
-                    <div className="flex space-x-4 text-right">
-                      <label className="flex items-center text-right">
-                        <input
-                          type="radio"
-                          name={key}
-                          value="true"
-                          onChange={() => handleBooleanChange(key, true)}
-                          className="mr-1 text-right"
-                        />
-                        כן
-                      </label>
-                      <label className="flex items-center text-right">
-                        <input
-                          type="radio"
-                          name={key}
-                          value="false"
-                          onChange={() => handleBooleanChange(key, false)}
-                          className="mr-1 text-right"
-                        />
-                        לא
-                      </label>
-                    </div>
-                  )}
-                </div>
-              )}
-              <div className="mt-2">
-                <label className="block text-sm font-semibold">אם תוכל/י להרחיב בכמה מילים:</label>
-                <textarea
-                  dir="rtl"
-                  value={formData[key]?.comment || ''}
-                  onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleCommentChange(key, e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                />
-              </div>
+    <div className="bg-orange-100">
+      <button className="left-0 top-0 lg:hidden md:hidden sm:hidden" onClick={() => { setIsOpen(!isOpen) }} >
+        <svg className="w-6 h-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 11h16M4 16h16" />
+        </svg>
+      </button >
+      {isOpen && (
+        <nav className="lg:hidden md:hidden sm:hidden left-0 top-0 flex shadow bg-white  justify-around items-center text-purple-500 lg:text-3xl lg:h-[80px] md:text-2m md:h-[30px] sm:text-sm  text-xs mt-4 sm:mt-0 font-normal font-['Alef'] leading-[45px] cursor-pointer">
+          <div onClick={() => nav('/login')}>
+            הרשמה
+          </div>
+          <div onClick={() => nav('/contact')}>
+            צור קשר
+          </div>
+          <div onClick={() => nav('/threeTop')}>
+            מוסדות בדירוג הגבוה ביותר
+          </div>
+          <div onClick={() => nav('/institutesCategory')}>
+            מוסדות בארץ
+          </div>
+          <div className='font-bold'>
+            אודות
+          </div>
+        </nav>
+      )}
+      <div className="flex  justify-center items-center">
+        <img className="mt-2 lg:hidden md:hidden sm:hidden max-w-[25%]" src="/לוגו.svg" alt="Logo" />
+
+      </div>
+      <nav className="hidden lg:flex md:flex sm:flex left-0 top-0 shadow bg-white  justify-center  items-center  text-purple-500 lg:text-2xl  lg:h-[47px] md:text-sm  md:h-[40px] sm:text-xs  sm:space-x-12 sm:h-[40px]  mt-4 sm:mt-0 font-normal font-['Alef'] leading-[45px] cursor-pointer space-x-11">
+        <img className="max-w-[2%] lg:max-w-[4%] lg:mr-15  md:max-w-[4%] sm:max-w-[3%]" src="/לוגו.svg" alt="Logo" />
+        <div onClick={() => nav('/register')}>
+          התחברות
+        </div>
+        <div onClick={() => nav('/login')}>
+          הרשמה
+        </div>
+        <div onClick={() => nav('/contact')}>
+          צור קשר
+        </div>
+        <div onClick={() => nav('/threeTop')}>
+          מוסדות בדירוג הגבוה ביותר
+        </div>
+        <div className='font-bold' onClick={() => nav('/institutesCategory')}>
+          מוסדות בארץ
+        </div>
+        <div onClick={() => nav('/')}>
+          אודות
+        </div>
+      </nav>
+      <div className='flex items-center'>
+        <img className="mt-3 ml-5 max-w-[1%] lg:max-w-[1%] lg:mr-15  md:max-w-[1%] sm:max-w-[1%]" src="/חץ חזור.svg" alt="Logo" onClick={() => nav(-1)} />
+      </div>
+      <div className='items-center justify-center flex'>
+        <div className="flex w-[220.74px] h-[30.78px] bg-purple-500 justify-center items-center gap-[8.29px]">
+          <img className="flex " src="/הורדה.svg" alt="Logo" />
+          <button type="button"
+            onClick={handleImageUploadClick} className="text-center text-indigo-50 text-xl font-bold font-['Alef'] leading-[24.86px]">עלה תמונות של המוסד</button>
+        </div>
+      </div>
+
+      <div className="mt-3 lg:mb-16 md:mb-14  flex flex-wrap justify-center">
+        {images.length < 5 && (
+          <>
+            <input
+              ref={ref => {
+                fileInputRefs.current[fileInputRefs.current.length] = ref;
+              }}
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              style={{ display: 'none' }}
+            />
+
+          </>
+        )}
+        <div className='lg:flex md:flex'>
+          {images.map((image, index) => (
+            <div key={index} className="h-44 w-44  items-center ml-9 mr-4 ">
+              <img src={URL.createObjectURL(image)} alt="Uploaded Image" className="max-w-full h-auto" />
             </div>
           ))}
-          <div className="mb-4">
-            {images.length < 5 && (
-              <>
-                <label className="block text-lg font-semibold mb-2 text-right">הוספת תמונה</label>
-                <input
-                  ref={ref => {
-                    fileInputRefs.current[fileInputRefs.current.length] = ref;
-                  }}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  style={{ display: 'none' }}
-                />
-                <button
-                  type="button"
-                  onClick={handleImageUploadClick}
-                  className="bg-blue-500 text-white py-2 px-4 rounded-md mb-4 focus:outline-none focus:ring focus:border-blue-300"
-                >
-                  Add File
-                </button>
-              </>
-            )}
-            {images.map((image, index) => (
-              <div key={index} className="mt-2">
-                <Image src={URL.createObjectURL(image)} alt="Uploaded Image" />
+        </div>
+      </div>
+
+
+      <form onSubmit={handleSubmit} className="flex flex-wrap justify-center" encType="multipart/form-data">
+        {questions.map(({ key, text, hasRating }) => (
+          <div key={key} className="w-full  md:w-1/2 lg:w-1/3  px-4  mb-1 border border-purple-300 shadow">
+            <p className="text-center text-purple-800 text-[18px] font-normal font-['Alef']">{text}</p>
+            <div className="mt-2">
+              <textarea
+                placeholder='אם תוכל/י להרחיב בכמה מילים:'
+                dir="rtl"
+                value={formData[key]?.comment || ''}
+                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleCommentChange(key, e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              />
+            </div>
+            {key === 'ReligiousLevel' ? (
+              <div className="flex space-x-4 justify-center">
+                {['חרדי', 'חילוני', 'דתי'].map((option) => (
+                  <label key={option} className="flex items-center text-center text-purple-800">
+                    <input
+                      type="radio"
+                      name="ReligiousLevel"
+                      value={option}
+                      onChange={() => handleReligiousLevelChange(option)}
+                      className="mr-1 text-center"
+                    />
+                    {option}
+                  </label>
+                ))}
               </div>
-            ))}
+            ) : (
+              <div className="flex space-x-4 justify-center text-purple-800">
+                {hasRating ? (
+                  [1, 2, 3, 4, 5].map((star) => (
+                    <label key={star} className="flex items-center">
+                      <input
+                        type="radio"
+                        name={key}
+                        value={star}
+                        onChange={() => handleRatingChange(key, star)}
+                        className="mr-1 text-right "
+                      />
+                      {star}
+                    </label>
+                  ))
+                ) : (
+                  <div className="flex space-x-4 justify-center text-purple-800">
+                    <label className="flex items-center text-right">
+                      <input
+                        type="radio"
+                        name={key}
+                        value="true"
+                        onChange={() => handleBooleanChange(key, true)}
+                        className="mr-1 text-right "
+                      />
+                      כן
+                    </label>
+                    <label className="flex items-center text-center text-purple-800">
+                      <input
+                        type="radio"
+                        name={key}
+                        value="false"
+                        onChange={() => handleBooleanChange(key, false)}
+                        className="mr-1 text-right "
+                      />
+                      לא
+                    </label>
+                  </div>
+                )}
+              </div>
+            )}
 
           </div>
-          <button
-            type="submit"
-            className="w-full bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-600 focus:outline-none focus:ring focus:border-purple-300"
-          >
-            שלח
-          </button>
-        </form>
-      </div>
+
+        ))}
+        <div className="flex w-[114px] h-10 relative">
+          <div className="w-[70px] h-[30px] left-0 top-0 absolute bg-orange-300 rounded-[20px]" />
+          <div className="w-[31px] h-6 left-[4px] top-[3px] absolute bg-zinc-300 rounded-[20px]" />
+        </div>
+
+        <div className="w-[114px] h-10 relative">
+          <div className="w-[70px] h-[30px] left-0 top-0 absolute bg-neutral-500 rounded-[20px]" />
+          <div className="w-[31px] h-6 left-[35px] top-[3px] absolute bg-zinc-300 rounded-[20px]" />
+        </div>
+
+        <div className="w-full justify-center text-center mt-2 mb-1 items-center  h-[30.78px]">
+          <button type='submit' className="shadow border-2 border-purple-600 px-3 rounded-md bg-purple-600 text-center text-indigo-50 text-xl font-bold font-['Alef'] leading-[24.86px]">שלח</button>
+        </div>
+      </form>
+      <div className="text-center text-red-600 text-lg font-normal font-['Alef'] leading-[25px]">"התרשמותך חשובה לנו, אנא התנסח באופן קונקרטי, נעים ומכבד על מנת שאחרים יוכלו להפיק תועלת מהמידע שאתה משתף מבלי שאף אחד יפגע<br /> "התגובות עוברות בקרה ותגובה שתנוסח בצורה לא מכבדת תאלץ להימחק</div>
     </div>
+
   );
 };
 

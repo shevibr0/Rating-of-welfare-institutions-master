@@ -55,6 +55,6 @@ Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMj
 get http://localhost:3000/reviews/getReviews/?institutId=653a4f6c4e6b26c828a4fccf&offset=4
 Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwMzc2MjU3OCwiZXhwIjoxNzI5NjgyNTc4fQ.fOZZ2iY4vLDgMOCmk0PnCsb9FME7KQtWXFBWrdeiCKA; Path=/; HttpOnly; Secure; SameSite=None
 
-### get review
-get http://localhost:3000/reviews/getReviews/?institutId=653a4f6c4e6b26c828a4fccf&limit=4&offset=4
-Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwMzc2MjU3OCwiZXhwIjoxNzI5NjgyNTc4fQ.fOZZ2iY4vLDgMOCmk0PnCsb9FME7KQtWXFBWrdeiCKA; Path=/; HttpOnly; Secure; SameSite=None
+### get image
+get http://localhost:3000/reviews/getImages/?institutId=653a4f6c4e6b26c828a4fccf
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcxMTcxOTIzMSwiZXhwIjoxNzM3NjM5MjMxfQ.iyCTQFrrFuj3daQXKoMXRi3em5BM-4FBxXk1ZpAtwCY; Path=/; HttpOnly; Secure; SameSite=None

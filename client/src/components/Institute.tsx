@@ -92,7 +92,7 @@ const Institute = () => {
 
 
     return (
-        <div className="bg-orange-100">
+        <div className="bg-orange-100 h-screen">
             <div>
                 <button className="left-0 top-0 lg:hidden md:hidden sm:hidden" onClick={() => { setIsOpen(!isOpen) }} >
                     <svg className="w-6 h-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -148,7 +148,7 @@ const Institute = () => {
                 </div>
                 <span className="flex justify-center items-center  text-purple-700 text-4xl font-bold font-['Alef']"> {` לרשותכם ${numOfInstitutes} מסגרות רווחה בארץ `} </span>
                 <div className='flex justify-center items-center'>
-                    <a href='/institutesCategory' className="ml-5 mt-5 mb-5 text-purple-700 text-sm font-normal font-['Alef'] underline">לחיפוש לפי קטגוריה </a>
+                    <a href='/institutesCategory' className="ml-5 mt-5 mb-5 text-purple-700 text-sm font-normal font-['Alef'] ">לחץ  כאן לחיפוש לפי קטגוריה </a>
                 </div>
                 <div className="flex justify-center items-center ml-8 mr-0">
                     <input onChange={(e) => {

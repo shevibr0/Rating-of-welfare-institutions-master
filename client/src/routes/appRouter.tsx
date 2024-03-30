@@ -16,6 +16,7 @@ import InstituteByCategory from '../components/InstituteByCategory'
 import DetailsComments from '../components/DetailsComments'
 import Pictures from '../components/Pictures'
 import Comments from '../components/Comments'
+import Test from '../components/test'
 
 const AppRouter = () => {
   const { user } = useContext(UserContext)
@@ -36,6 +37,7 @@ const AppRouter = () => {
       <Route path="/contact" element={<Contact />} ></Route>
       <Route path="/threeTop" element={<ThreeTop />} ></Route>
       <Route path="/c" element={<Comments />} ></Route>
+      <Route path="/test/:id" element={<Test />} ></Route>
       <Route path="*" element={<h1>404</h1>}> </Route>
     </Routes >
   )

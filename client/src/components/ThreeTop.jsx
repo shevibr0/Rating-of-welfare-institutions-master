@@ -2,7 +2,9 @@ import React from 'react'
 
 const ThreeTop = () => {
     return (
+
         <div className="w-[1920px] h-[1080px] relative bg-white">
+
             <img className="w-[1413px] h-[1078px] left-[281px] top-[-91px] absolute" src="public/threeTop.svg" />
             <div className="left-[1337px] top-[154px] absolute">
                 <div className="w-[264px] h-[0px] left-[109px] top-[62px] absolute border-4 border-black"></div>

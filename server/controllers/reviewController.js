@@ -158,11 +158,27 @@ const reviewCtrl = {
         }
       }));
 
-      res.json({ imageUrls: uploadedImageUrls });
+      res.status.json({ imageUrls: uploadedImageUrls });
 
     } catch (error) {
       console.error("Error during image upload:", error);
       res.status(500).json({ error: 'Failed to upload images' });
+    }
+  }
+  ,
+  async getImages({ query }, res, next) {
+    try {
+      const institutId = query.institutId;
+      // Find images by institution ID
+      const imagesData = await Image.find({ institutionCode: institutId });
+
+      // Extract image URLs from the imagesData
+      const imageUrls = imagesData.map(image => image.images).flat();
+
+      // Send the image URLs as a response
+      res.status(200).json({ imageUrls });
+    } catch (error) {
+      next({ stack: error });
     }
   }
   ,
