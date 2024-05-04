@@ -8,10 +8,12 @@ const debounce = _.debounce;
 const Institute = () => {
     const nav = useNavigate()
     const [searchValue, setSearchValue] = useState("")
-    const [data, setData] = useState([])
+    const [data, setData] = useState<InstituteData[]>([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [hasImages, setHasImages] = useState<{ [key: string]: boolean }>({});
     const [numOfInstitutes, setNumOfInstitutes] = useState(0);
     const [data1, setData1] = useState<InstituteData | null>(null);
+
 
 
     interface InstituteData {
@@ -53,10 +55,26 @@ const Institute = () => {
         onSearch();
     }, [searchValue]);
 
-    useEffect(() => {
-        GetNumOfInstitutes()
-    }, [])
 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            GetNumOfInstitutes();
+            const imagesMap: { [key: string]: boolean } = {};
+            for (const institute of data) {
+                try {
+                    const id = institute._id; // Get the ID of the current institute
+                    console.log("Checking images for institute with ID:", id);
+                    imagesMap[id] = await checkImages(id);
+                } catch (error) {
+                    console.error("Error checking images for institute with ID:", institute._id, error);
+                    imagesMap[institute._id] = false; // Set the image status to false if an error occurs
+                }
+            }
+            setHasImages(imagesMap);
+        };
+        fetchData();
+    }, [data]);
 
 
     const GetNumOfInstitutes = async () => {
@@ -89,6 +107,20 @@ const Institute = () => {
             console.log("failed")
         }
     }
+    const checkImages = async (id: any) => { // <-- Add 'async' here
+        try {
+            console.log("idd", id)
+            const response = await fetch(`http://localhost:3000/hasImages/?institutId=${id}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch images');
+            }
+            const data = await response.json();
+            return data.hasImages; // Assuming the server returns { hasImages: true/false }
+        } catch (error) {
+            console.error('Error checking images:', error);
+            // Handle error, e.g., show an error message to the user
+        }
+    };
 
 
     return (
@@ -195,6 +227,11 @@ const Institute = () => {
                                 </li>
                             </ul>
                             <StarRating averageRating={institute.avgRating.sum / institute.avgRating.count} />
+                            {hasImages[institute._id] ? (
+                                <img className="mt-3 ml-5 max-w-[6%]  mr-2 mb-3" src="/מצלמה מלא.svg" alt="Full Camera" onClick={() => nav(-1)} />
+                            ) : (
+                                <img className="mt-3 ml-5 max-w-[6%]  mr-2 mb-3" src="/מצלמה ריק.svg" alt="Empty Camera" onClick={() => nav(-1)} />
+                            )}
                             <button className="font-semibold mb-2 mt-4 border border-purple-500 text-purple-500 p-2 rounded-md hover:opacity-80  hover:text-black hover:font-extrabold hover:border-black" onClick={() => nav(`/info/${institute._id}`)}>פרטים נוספים</button>
                         </div>
                     </div>

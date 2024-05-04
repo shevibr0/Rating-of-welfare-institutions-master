@@ -6,7 +6,8 @@ const Pictures = () => {
 
     const nav = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
-    const [images, setImages] = useState([]);
+    const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined);
+    const [images, setImages] = useState<string[]>([]);
     const params = useParams();
     const institutId = params["id"]
 
@@ -24,6 +25,15 @@ const Pictures = () => {
         }
         fetchImages(institutId);
     }, [institutId]);
+    const openModal = (imageUrl: string) => {
+        setSelectedImage(imageUrl);
+        setIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setSelectedImage(undefined); // Update state to undefined when closing modal
+        setIsOpen(false);
+    };
 
 
     return (
@@ -54,7 +64,7 @@ const Pictures = () => {
                     </nav>
                 )}
                 <div className="flex  justify-center items-center">
-                    <img className="mt-2 lg:hidden md:hidden sm:hidden max-w-[25%]" src="public/לוגו.svg" alt="Logo" />
+                    <img className="mt-2 lg:hidden md:hidden sm:hidden max-w-[25%]" src="/לוגו.svg" alt="Logo" />
 
                 </div>
                 <nav className="hidden lg:flex md:flex sm:flex left-0 top-0 shadow bg-white  justify-center  items-center  text-purple-500 lg:text-2xl  lg:h-[47px] md:text-sm  md:h-[40px] sm:text-xs  sm:space-x-12 sm:h-[40px]  mt-4 sm:mt-0 font-normal font-['Alef'] leading-[45px] cursor-pointer space-x-11">
@@ -82,18 +92,24 @@ const Pictures = () => {
                     <img className="mt-3 ml-5 max-w-[1%] lg:max-w-[1%] lg:mr-15  md:max-w-[1%] sm:max-w-[1%]" src="/חץ חזור.svg" alt="Logo" onClick={() => nav(-1)} />
                 </div>
             </div>
-            <div className='flex flex-wrap'>
-                <div className="w-full lg:w-1/4  md:w-1/2  px-4 mb-8">
-                    <h2 className="text-center text-black text-[40px] font-normal font-['Alef']">תמונות מהמסגרת</h2>
-                    {images.map((image, index) => (
-                        <img className='w-80 h-[246px] border-2 border-purple-500' key={index} src={image} alt={`Image ${index}`} />
-                    ))}
 
-                </div>
+            <div className="flex flex-wrap mb-8 justify-center items-center mt-3">
+                {images.map((image, index) => (
+                    <img
+                        key={index}
+                        className="md:w-1/4 lg:w-1/5 sm:w-1/3 w-1/2 h-44 border-2 border-purple-800 ml-1 mr-1 mb-3 cursor-pointer"
+                        src={image}
+                        alt={`Image ${index}`}
+                        onClick={() => openModal(image)}
+                    />
+                ))}
             </div>
-        </div >
-
+            {isOpen && selectedImage && ( // Check if selectedImage is not undefined
+                <div className="fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-75 flex justify-center items-center" onClick={closeModal}>
+                    <img src={selectedImage} alt="Enlarged Image" className="max-h-full max-w-full" />
+                </div>
+            )}
+        </div>
     )
-
 }
 export default Pictures

@@ -182,6 +182,20 @@ const reviewCtrl = {
     }
   }
   ,
+
+  async hasImages({ query }, res, next) {
+    try {
+      const id = query.institutId;
+      console.log("idd", id)
+      // Check if there are any images associated with the institution ID
+      const imageDocument = await Image.findOne({ institutionCode: id });
+      console.log("imageDocument", imageDocument)
+      return !!imageDocument; // Return true if imageDocument exists, false otherwise
+    } catch (error) {
+      next({ stack: error });
+    }
+  }
+  ,
   async deleteReview({ query, body, payload }, res, next) {
     try {
       const userId = payload._id;

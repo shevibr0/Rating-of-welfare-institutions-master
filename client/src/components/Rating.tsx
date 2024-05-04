@@ -386,7 +386,7 @@ const Rating: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-3 lg:mb-16 md:mb-14  flex flex-wrap justify-center">
+      <div className="mt-3 overflow-x-auto flex flex-wrap justify-center" style={{ maxWidth: '100%' }}>
         {images.length < 5 && (
           <>
             <input
@@ -398,12 +398,11 @@ const Rating: React.FC = () => {
               onChange={handleImageChange}
               style={{ display: 'none' }}
             />
-
           </>
         )}
-        <div className='lg:flex md:flex'>
+        <div className="lg:flex md:flex lg:w-full  md:w-full justify-center">
           {images.map((image, index) => (
-            <div key={index} className="h-44 w-44  items-center ml-9 mr-4 ">
+            <div key={index} className="h-55 w-44 items-center ml-9 mr-4 mt-1 mb-1">
               <img src={URL.createObjectURL(image)} alt="Uploaded Image" className="max-w-full h-auto" />
             </div>
           ))}

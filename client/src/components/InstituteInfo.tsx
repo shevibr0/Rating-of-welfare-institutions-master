@@ -60,7 +60,7 @@ const InstituteInfo = () => {
     }
   }
   return (
-    <div className="bg-orange-100 h-screen">
+    <div className="bg-orange-100 lg:h-screen">
       <button className="left-0 top-0 lg:hidden md:hidden sm:hidden" onClick={() => { setIsOpen(!isOpen) }} >
         <svg className="w-6 h-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 11h16M4 16h16" />
@@ -115,7 +115,7 @@ const InstituteInfo = () => {
       </div>
 
 
-      <div className="flex justify-around items-center ">
+      <div className="flex justify-center items-center">
         {data && (
           <div className="justify-center cursor-pointer">
             <h2 className="text-3xl font-bold mb-7 text-purple-600 text-center ">פרטי המוסד</h2>
@@ -285,6 +285,7 @@ const InstituteInfo = () => {
         <div className="bg-purple-500 w-[267.20px] h-[40px] shadow border-2 border-purple-500 border-opacity-50 mr-2 ml-2" onClick={() => nav(`/info/${id}/pictures`)}>
           <div className="px-4 py-0 flex  justify-center">
             <p className="text-center text-white  text-base font-normal font-['Alef'] leading-[37.23px] mr-1"></p>
+            <img className="mt-3 ml-5 max-w-[6%]  mr-2 mb-3 " src="/מצלמה מלא.svg" alt="Logo" onClick={() => nav(-1)} />
             <p className="text-center text-white  text-[23.16px] font-bold font-['Alef']">תמונות המסגרת</p>
           </div>
         </div>
