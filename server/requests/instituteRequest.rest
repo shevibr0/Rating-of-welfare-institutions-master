@@ -25,7 +25,7 @@ Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMj
 }
 
 ### get Institutes
-get http://localhost:3000/institutes/getInstitutes/?limit=4
+get http://localhost:3000/institutes/getInstitutes/?limit=40
 Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNmNjBjMjBjYzQ5NzRkN2EyMTdhNTMiLCJyb2xlIjoidXNlciIsImlhdCI6MTcwMzc1NDk2MiwiZXhwIjoxNzI5Njc0OTYyfQ.WLah5h4kDDAbm7xsBdMlO0VXU_j9JwCQhTMGuM71Mp8; Path=/; HttpOnly; Secure; SameSite=None
 
 ### get Institutes by id
