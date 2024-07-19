@@ -3,18 +3,15 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router';
 import _ from 'lodash';
 import StarRating from './StarRating';
+import Navbar from './Navbar';
 
 const InstituteByCategory = () => {
     const nav = useNavigate();
     const [institutes, setInstitutes] = useState([]);
     const [searchValue, setSearchValue] = useState("")
-    const [isOpen, setIsOpen] = useState(false);
-    const [page, setPage] = useState(1);
-
-
     const params = useParams();
     const name = params["id"]
-
+    const [hasImages, setHasImages] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
         fetchInstitutesByCategory(searchValue)
@@ -56,106 +53,66 @@ const InstituteByCategory = () => {
 
     return (
         <div className="bg-orange-100 h-screen">
-            <div>
-                <button className="left-0 top-0 lg:hidden md:hidden sm:hidden" onClick={() => { setIsOpen(!isOpen) }} >
-                    <svg className="w-6 h-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 11h16M4 16h16" />
-                    </svg>
-                </button >
-                {isOpen && (
-                    <nav className="lg:hidden md:hidden sm:hidden left-0 top-0 flex shadow bg-white  justify-around items-center text-purple-500 lg:text-3xl lg:h-[80px] md:text-2m md:h-[30px] sm:text-sm  text-xs mt-4 sm:mt-0 font-normal font-['Alef'] leading-[45px] cursor-pointer">
-                        <div onClick={() => nav('/login')}>
-                            הרשמה
-                        </div>
-                        <div onClick={() => nav('/contact')}>
-                            צור קשר
-                        </div>
-                        <div onClick={() => nav('/threeTop')}>
-                            מוסדות בדירוג הגבוה ביותר
-                        </div>
-                        <div onClick={() => nav('/institutesCategory')}>
-                            מוסדות בארץ
-                        </div>
-                        <div className='font-bold'>
-                            אודות
-                        </div>
-                    </nav>
-                )}
-                <div className="flex  justify-center items-center">
-                    <img className="mt-2 lg:hidden md:hidden sm:hidden max-w-[25%]" src="public/לוגו.svg" alt="Logo" />
-
-                </div>
-                <nav className="hidden lg:flex md:flex sm:flex left-0 top-0 shadow bg-white  justify-center  items-center  text-purple-500 lg:text-2xl  lg:h-[47px] md:text-sm  md:h-[40px] sm:text-xs  sm:space-x-12 sm:h-[40px]  mt-4 sm:mt-0 font-normal font-['Alef'] leading-[45px] cursor-pointer space-x-11">
-                    <img className="max-w-[2%] lg:max-w-[4%] lg:mr-15  md:max-w-[4%] sm:max-w-[3%]" src="/לוגו.svg" alt="Logo" />
-                    <div onClick={() => nav('/register')}>
-                        התחברות
-                    </div>
-                    <div onClick={() => nav('/login')}>
-                        הרשמה
-                    </div>
-                    <div onClick={() => nav('/contact')}>
-                        צור קשר
-                    </div>
-                    <div onClick={() => nav('/threeTop')}>
-                        מוסדות בדירוג הגבוה ביותר
-                    </div>
-                    <div className='font-bold' onClick={() => nav('/institutesCategory')}>
-                        מוסדות בארץ
-                    </div>
-                    <div onClick={() => nav('/')}>
-                        אודות
-                    </div>
-                </nav>
-                <div className='flex items-center'>
-                    <img className="mt-3 ml-5 max-w-[1%] lg:max-w-[1%] lg:mr-15  md:max-w-[1%] sm:max-w-[1%]" src="/חץ חזור.svg" alt="Logo" onClick={() => nav(-1)} />
-                </div>
-                <div className="flex justify-center items-center ml-8 mr-0">
-                    <input
-                        onChange={(e) => {
+            <Navbar />
+            <div className='flex items-center'>
+                <img className="mt-3 ml-5 max-w-[1%] lg:max-w-[1%] lg:mr-15  md:max-w-[1%] sm:max-w-[1%]" src="/חץ חזור.svg" alt="Logo" onClick={() => nav(-1)} />
+            </div>
+            <div className="bg-orange-100">
+                <div className="text-center mb-4">
+                    <div className="relative flex items-center justify-center">
+                        <input onChange={(e) => {
                             setSearchValue(e.target.value);
-                            searchInstitutesByCategory();
-                            // Call the debounced search function as the user types
+                            debouncedSearch();
                         }}
-                        type="search"
-                        placeholder={`בצע חיפוש בתוך הקטגוריה ${name}`}
-                        dir="rtl"
-                        className="mb-5 w-[700.75px] h-[40px] border-2 border-purple-500 bg-orange-100 px-4 focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-600 transition-all duration-300"
-                    />
+                            value={searchValue}
+                            type="search"
+                            placeholder="חפש מסגרת"
+                            dir="rtl"
+                            className="border border-purple-700 pl-10 pr-4 py-2 rounded-md" />
+                    </div>
                 </div>
-                <div className="flex flex-wrap">
-                    {institutes.map((institute: any) => (
-                        <div key={institute._id} className="w-full lg:w-1/4  md:w-1/2  px-4 mb-8">
-                            <div className="bg-white rounded p-4 shadow-md border border-purple-400 hover:opacity-90  text-purple-700 hover:text-black hover:font-extrabold hover:bg-purple-400" style={{ direction: 'rtl', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-                                <h2 className="text-xl font-semibold  font-['Alef'] mb-2 ">{institute.Name}</h2>
-                                <ul className="list-none pl-0  text-purple-700  hover:text-black hover:font-extrabold">
-                                    <li className="mb-2">
-                                        <p><span className='font-bold'>סוג המוסד</span>: {institute.Type_Descr}</p>
-                                    </li>
-                                    <li className="mb-2">
-                                        <p><span className='font-bold'>שיוך למחלקה</span>: {institute.Head_Department}</p>
-                                    </li>
-                                    {/* <li className="mb-2">
-                                <p className="text-orange-400">סמכות אחראית: {institute.Owner_Code_Descr}</p>
-                            </li> */}
-                                    <li className="mb-2">
-                                        <p><span className='font-bold'>שם הרשות המקומית</span>: {institute.Authoritys}</p>
-                                    </li>
-                                    <li className="mb-2">
-                                        <p><span className='font-bold'>אזור</span>: {institute.Region_Descr}</p>
-                                    </li>
-                                    <li className="mb-2">
-                                        <p><span className='font-bold'>עיר</span>: {institute.City_Name}</p>
-                                    </li>
-                                </ul>
-                                <StarRating averageRating={institute.avgRating.sum / institute.avgRating.count} />
-                                <button className="font-semibold mb-2 mt-4 border border-purple-500 text-purple-500 p-2 rounded-md hover:opacity-80  hover:text-black hover:font-extrabold hover:border-black" onClick={() => nav(`/info/${institute._id}`)}>פרטים נוספים</button>
-                            </div>
-                        </div>
 
+            </div>
+            <div className='ml-2 mr-2 text-purple-700 bg-red-100'>
+                <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-3 gap-2 text-center w-full">
+                    {institutes.map((institute: any) => (
+                        <div key={institute._id} className="bg-white text-center shadow shadow-purple-700 p-4 rounded-2xl hover:animate-button-push hover:shadow hover:shadow-gray-700">
+                            <h2 className="text-lg font-bold mb-2">{institute.Name}</h2>
+                            <ul className="list-none pl-0 text-purple-700">
+                                <li className="mb-2">
+                                    <p>
+                                        {/* <span className='font-bold'>סוג המוסד</span> */}
+                                        {institute.Type_Descr}</p>
+                                </li>
+                                <li className="mb-2">
+                                    <p>
+                                        {/* <span className='font-bold'>שיוך למחלקה</span> */}
+                                        {institute.Head_Department}</p>
+                                </li>
+                                <li className="mb-2">
+                                    <p><span className='font-bold'>רשות</span> {institute.Authoritys}</p>
+                                </li>
+                                <li className="mb-2">
+                                    <p><span className='font-bold'>אזור</span> {institute.Region_Descr}</p>
+                                </li>
+                                <li className="mb-2">
+                                    <p><span className='font-bold'>עיר</span> {institute.City_Name}</p>
+                                </li>
+                            </ul>
+                            <StarRating averageRating={institute.avgRating.sum / institute.avgRating.count} />
+                            <div className="flex flex-col items-center mt-3 ml-5 mr-2 mb-3">
+                                {hasImages[institute._id] ? (
+                                    <img className="max-w-[6%]" src="/מצלמה מלא.svg" alt="Full Camera" onClick={() => nav(-1)} />
+                                ) : (
+                                    <img className="max-w-[6%]" src="/מצלמה ריק.svg" alt="Empty Camera" onClick={() => nav(-1)} />
+                                )}
+                            </div>
+                            <button className="btn bg-red-200 font-bold text-purple-700 py-2 px-4 rounded-xl hover:animate-button-push" onClick={() => nav(`/info/${institute._id}`)}>פרטים נוספים</button>
+                        </div>
                     ))}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

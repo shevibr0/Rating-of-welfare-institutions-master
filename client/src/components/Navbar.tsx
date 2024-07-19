@@ -13,7 +13,7 @@ const Navbar = () => {
 
     return (
         <>
-            <nav className="flex left-0 top-0  bg-orange-100 justify-center items-center text-3xl text-purple-500  font-normal font-['Alef'] h-[80px]  cursor-pointer space-x-11">
+            <nav className="flex left-0 top-0  bg-orange-100 justify-center items-center text-3xl text-purple-500  font-normal  font-['Ploni Yad v2 AAA'] h-[80px]  cursor-pointer space-x-11">
                 {!user && (
                     <>
                         <div onClick={() => nav('/login')} className='transition duration-100 hover:text-red-300'> <IoMdLogIn /></div>
@@ -31,7 +31,7 @@ const Navbar = () => {
             </nav>
             <div className='flex justify-center'>
                 {user && (
-                    <div className="text-lg text-purple-500 font-semibold text-center">
+                    <div className="text-lg text-purple-500 font-semibold text-center  font-['Ploni Yad v2 AAA']">
                         {user.name}  שלום
                     </div>
                 )}

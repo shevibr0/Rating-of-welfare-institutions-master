@@ -28,7 +28,7 @@ const HomePage = () => {
 
 
       <div className="flex justify-center mt-2">
-        <button onClick={() => nav('/institutes')} className="font-bold font-['Alef']  bg-purple-500 font-['Ploni Yad v2 AAA'] text-orange-100  py-2 px-4 rounded-full hover:animate-button-push">
+        <button onClick={() => nav('/institutes')} className="font-bold   bg-purple-500 font-['Ploni Yad v2 AAA'] text-orange-100  py-2 px-4 rounded-full hover:animate-button-push">
           חיפוש
         </button>
       </div>
